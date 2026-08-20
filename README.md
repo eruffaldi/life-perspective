@@ -277,6 +277,13 @@ l'archivio vero; il salvataggio nel browser è comodità, non backup.
 
 ---
 
+## Lavorare con Claude Code
+
+`CLAUDE.md` nella radice raccoglie invarianti, trappole già pagate e la
+decisione aperta sul bundler. Viene letto all'inizio di ogni sessione: se
+correggi Claude su qualcosa che vale anche per la prossima volta, quello è il
+posto dove metterlo.
+
 ## Struttura del repository
 
 ```

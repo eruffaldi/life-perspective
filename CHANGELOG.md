@@ -9,6 +9,11 @@ progetto è arrivato alla forma attuale.
 
 ## [0.4.1] — 2026-08-20
 
+### Aggiunto
+
+- `CLAUDE.md`: invarianti, trappole note e decisioni aperte, per le sessioni
+  di Claude Code.
+
 ### Modificato
 
 - I dati d'esempio non descrivono più una persona reale: la famiglia è
