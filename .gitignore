@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.docker-stamp
+*.log
+.DS_Store
