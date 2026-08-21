@@ -1,0 +1,24 @@
+/* Fondamenta: azzeramento, corpo del documento e impilamento delle viste */
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--ui); font-size:14px; line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select{font:inherit;color:inherit}
+
+/* Le viste stanno una sopra l'altra: si scambia la classe `on`, non il DOM. */
+main{position:absolute; inset:0; top:var(--headh,58px); bottom:var(--navh,0px); overflow:hidden}
+.pane{
+  position:absolute; inset:0; overflow:auto; display:none;
+  /* Scorrimento al browser, pinch a noi. Senza questa riga il gesto a due
+     dita diventa lo zoom della pagina e il nostro gestore non viene mai
+     eseguito: `preventDefault` su pointermove non basta, la decisione la
+     prende il browser prima, e la prende da qui. */
+  touch-action:pan-x pan-y;
+}
+.pane.on{display:block}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}

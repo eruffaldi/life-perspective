@@ -1,0 +1,86 @@
+/* Intestazione: titolo, schede delle viste, strumenti, legenda */
+
+.head{
+  display:flex; align-items:baseline; gap:18px; flex-wrap:wrap;
+  padding:14px 18px 10px; border-bottom:1px solid var(--rule);
+  background:var(--paper); position:relative; z-index:20;
+}
+.brand{font-family:var(--display); font-size:22px; letter-spacing:.01em}
+.brand span{color:var(--now)}
+.sub{font-family:var(--data); font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-soft)}
+.spacer{flex:1}
+
+nav.views{display:flex; gap:2px; border:1px solid var(--rule); border-radius:2px; overflow:hidden}
+nav.views button{
+  background:transparent; border:0; padding:6px 13px; cursor:pointer;
+  font-size:12.5px; letter-spacing:.01em; color:var(--ink-soft);
+}
+nav.views button:hover{background:var(--paper-2)}
+nav.views button[aria-selected="true"]{background:var(--ink); color:var(--paper)}
+nav.views button:focus-visible{outline:2px solid var(--now); outline-offset:-2px}
+
+.tools{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.btn{
+  background:transparent; border:1px solid var(--rule); border-radius:2px;
+  padding:5px 11px; cursor:pointer; font-size:12.5px;
+}
+.btn:hover{border-color:var(--ink); background:var(--paper-2)}
+.btn:focus-visible{outline:2px solid var(--now); outline-offset:1px}
+.btn.on{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+
+/* La legenda vive nell'intestazione e compare solo sulle viste a grafico. */
+.legend{display:none; flex-basis:100%; gap:14px; flex-wrap:wrap; align-items:center;
+  font-family:var(--data); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-soft); padding:8px 0 2px; margin-top:8px; border-top:1px solid var(--rule-soft)}
+.legend.on{display:flex}
+.legend .hint{margin-left:auto; text-transform:none; letter-spacing:.02em; font-size:10.5px; opacity:.8}
+.legend i{display:inline-block; width:9px; height:9px; background:currentColor; transform:rotate(45deg); margin-right:5px; vertical-align:-1px}
+.legend .sq{transform:none; border-radius:1px; opacity:.4; border:1px solid currentColor}
+.legend .ci{transform:none; border-radius:50%; background:transparent; border:1.5px solid currentColor}
+.legend .ln{transform:none; width:2px; height:11px; background:var(--now); vertical-align:-2px}
+
+nav.views .sm{display:none}
+
+/* ------------------------------------------------------------------ *
+ * Telefono                                                            *
+ *                                                                     *
+ * Con l'intestazione su tre righe restava poco schermo per la carta,  *
+ * che e' l'unica cosa che conta. Le schede scendono in fondo — dove   *
+ * il pollice arriva — e in alto resta una barra sola.                 *
+ * ------------------------------------------------------------------ */
+@media (max-width:720px){
+  .head{padding:8px 12px; gap:10px; align-items:center}
+  .brand{font-size:16px}
+  .sub{display:none}
+  .tools{gap:6px}
+  .btn{padding:7px 11px}
+
+  nav.views{
+    position:fixed; left:0; right:0; bottom:0; z-index:30;
+    border:0; border-top:1px solid var(--rule); border-radius:0;
+    background:var(--paper); display:grid; grid-template-columns:repeat(5,1fr);
+    padding-bottom:env(safe-area-inset-bottom,0);
+  }
+  nav.views button{
+    padding:11px 2px; font-size:11.5px; letter-spacing:.01em;
+    border-top:2px solid transparent;
+  }
+  nav.views button[aria-selected="true"]{
+    background:transparent; color:var(--ink); border-top-color:var(--now);
+  }
+  nav.views .lg{display:none}
+  nav.views .sm{display:inline}
+}
+
+/* La legenda spiega un gesto che con il dito non esiste. */
+@media (hover:none){
+  .legend{display:none!important}
+}
+
+/* Selettore di lingua: presente ma discreto, non è la cosa importante. */
+.lang{
+  background:transparent; border:1px solid var(--rule); border-radius:2px;
+  padding:4px 6px; font-size:12px; color:var(--ink-soft); cursor:pointer;
+}
+.lang:hover{border-color:var(--ink); color:var(--ink)}
+.lang:focus-visible{outline:2px solid var(--now); outline-offset:1px}

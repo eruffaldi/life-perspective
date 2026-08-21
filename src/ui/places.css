@@ -1,0 +1,58 @@
+/* Carta dei luoghi: base cartografica, pin, tracce, cursore degli anni */
+
+.geo{position:absolute; inset:0; display:grid; grid-template-columns:1fr 302px}
+.geomap{position:relative; overflow:hidden; background:#DFE9EA; cursor:grab;
+  /* Senza questo il browser si prende il gesto e lo trasforma in scorrimento
+     della pagina prima che arrivi al tracker. */
+  touch-action:none}
+.geomap.drag{cursor:grabbing}
+.geomap svg{position:absolute; inset:0; width:100%; height:100%; display:block}
+.coast{fill:none; stroke:#93AAAE; stroke-width:.9; vector-effect:non-scaling-stroke; stroke-linejoin:round}
+.bord{fill:none; stroke:#B9CACC; stroke-width:.7; stroke-dasharray:3 3; vector-effect:non-scaling-stroke}
+.trace{fill:none; stroke-width:1.6; opacity:.55; stroke-dasharray:5 4; vector-effect:non-scaling-stroke}
+.pin{cursor:pointer}
+.pin .grab{fill:transparent; pointer-events:none}
+@media (pointer:coarse){
+  /* Bersaglio da polpastrello, solo dove serve: sul desktop i cerchi
+     allargati si ruberebbero i tooltip a vicenda. */
+  .pin .grab{pointer-events:all}
+  .scrub input[type=range]{height:28px}
+  .geoctl .btn{padding:9px 14px}
+}
+.pin circle{stroke:var(--paper); stroke-width:1.6; transition:opacity .12s}
+.pin text{font-family:var(--data); font-size:10.5px; fill:var(--ink); paint-order:stroke;
+  stroke:rgba(223,233,234,.9); stroke-width:3px; pointer-events:none}
+.pin.dim circle,.pin.dim text{opacity:.17}
+.pin.sel circle{stroke:var(--now); stroke-width:2.4}
+.geoctl{position:absolute; left:14px; top:14px; z-index:4; display:flex; flex-direction:column; gap:8px; align-items:flex-start}
+/* Lo sfondo traslucido vale per i comandi a riposo. Applicarlo anche allo
+   stato acceso lasciava il colore chiaro di `.btn.on` su fondo chiaro: il
+   pulsante sembrava vuoto. */
+.geoctl .btn:not(.on){background:rgba(231,237,238,.94); backdrop-filter:blur(2px)}
+.geoctl .btn.on{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+.geozoom{display:flex; flex-direction:column; gap:6px}
+.geozoom .btn{width:38px; height:38px; font-size:18px; line-height:1; padding:0;
+  display:flex; align-items:center; justify-content:center}
+@media (pointer:coarse){
+  .geozoom .btn{width:46px; height:46px}
+}
+.scrub{position:absolute; left:14px; right:14px; bottom:14px; z-index:4;
+  background:rgba(231,237,238,.94); border:1px solid var(--rule); border-radius:2px; padding:9px 14px 7px}
+.scrub .top{display:flex; align-items:baseline; gap:12px}
+.scrubyear{font-family:var(--display); font-size:22px; line-height:1; min-width:66px}
+.scrub input[type=range]{flex:1; accent-color:var(--now)}
+.scrub .agestrip{margin-top:4px}
+.geoside{border-left:1px solid var(--rule); overflow:auto; padding:16px 18px 40px}
+.plc{border-top:1px solid var(--rule-soft); padding:10px 0; cursor:pointer}
+.plc:first-of-type{border-top:1px solid var(--ink)}
+.plc:hover,.plc.sel{background:var(--paper-2)}
+.plc .pn{display:flex; align-items:baseline; gap:7px}
+.plc .pn b{font-family:var(--display); font-size:15px; font-weight:500}
+.plc .yrs{margin-left:auto; font-family:var(--data); font-size:11px; color:var(--ink-soft)}
+.plc .src{font-family:var(--data); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.plc ul{margin:5px 0 0; padding:0; list-style:none}
+.plc li{font-size:12.5px; display:flex; gap:8px}
+.plc li span{font-family:var(--data); font-size:10.5px; color:var(--ink-soft); white-space:nowrap}
+.nocoord{margin-top:22px; border-top:1px solid var(--rule); padding-top:12px}
+.nocoord code{font-family:var(--data); font-size:11.5px; background:var(--paper-2); padding:1px 4px}
+@media (max-width:860px){ .geo{grid-template-columns:1fr; grid-template-rows:1fr auto} .geoside{border-left:0; border-top:1px solid var(--rule); max-height:44%} }

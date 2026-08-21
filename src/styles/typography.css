@@ -1,0 +1,12 @@
+/* Atomi tipografici condivisi fra le viste testuali e la colonna dei luoghi.
+   Stanno qui, e non dentro una vista, perche' li usano in tre */
+
+.wrap{max-width:1080px; margin:0 auto; padding:26px 22px 80px}
+h2.sec{font-family:var(--display); font-size:19px; font-weight:500; margin:0 0 3px}
+p.lede{color:var(--ink-soft); font-size:13px; margin:0 0 20px; max-width:64ch}
+.dot{flex:0 0 7px; height:7px; background:currentColor; transform:rotate(45deg); margin-top:5px}
+.iwhen{font-family:var(--data); font-size:10.5px; color:var(--ink-soft); letter-spacing:.04em}
+.agestrip{font-family:var(--data); font-size:11px; color:var(--ink-soft); margin-top:3px}
+.agestrip b{color:var(--ink); font-weight:500}
+h3.subsec{font-family:var(--data); font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-soft); font-weight:400; margin:0 0 10px; padding-bottom:6px; border-bottom:1px solid var(--ink)}

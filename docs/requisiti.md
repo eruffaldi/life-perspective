@@ -56,8 +56,9 @@ ignorare gli avvisi.
 ## RNF — Requisiti non funzionali
 
 **RNF1** — La validazione è una funzione pura del documento: nessuna
-dipendenza dallo stato dell'applicazione, nessun effetto collaterale. È
-richiamabile da riga di comando (`make validate FILE=…`) e dai test.
+dipendenza dallo stato dell'applicazione, nessun effetto collaterale, nessun
+accesso al DOM. Vive in `src/validate/validate.ts` ed è richiamabile da riga di
+comando (`make validate FILE=…`) e dai test di unità.
 
 **RNF2** — I dati d'esempio inclusi non producono alcuna diagnostica. Un
 esempio che genera avvisi insegna che gli avvisi sono normali.

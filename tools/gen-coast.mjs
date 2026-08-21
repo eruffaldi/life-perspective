@@ -1,5 +1,5 @@
 /**
- * Genera src/coast.json: la base cartografica incorporata nell'artefatto.
+ * Genera src/data/coast.json: la base cartografica incorporata nell'artefatto.
  *
  * Origine: Natural Earth via il pacchetto npm `world-atlas` (public domain).
  * Due livelli di dettaglio:
@@ -118,9 +118,9 @@ const out = {
   world: { all: world.all, border: world.border },
   euro: { bbox: LAYERS.euro.bbox, all: euro.all, border: euro.border }
 };
-const dest = path.join(ROOT, "src", "coast.json");
+const dest = path.join(ROOT, "src", "data", "coast.json");
 fs.writeFileSync(dest, JSON.stringify(out));
 
 console.log(`gen-coast: world ${world.stats.lines} tratti / ${world.stats.points} vertici`);
 console.log(`gen-coast: euro  ${euro.stats.lines} tratti / ${euro.stats.points} vertici`);
-console.log(`gen-coast: src/coast.json — ${(fs.statSync(dest).size / 1024).toFixed(0)} KB`);
+console.log(`gen-coast: src/data/coast.json — ${(fs.statSync(dest).size / 1024).toFixed(0)} KB`);

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prospettiva — carta del tempo</title>
+</head>
+
+<header class="head" id="head">
+  <select id="lang" class="lang" aria-label="Lingua / Language"></select>
+  <div class="brand">Prospettiva<span>.</span></div>
+  <div class="sub" id="anchorline">—</div>
+  <div class="spacer"></div>
+  <nav class="views" role="tablist">
+    <button role="tab" data-view="chart" aria-selected="true"><span class="lg"></span><span class="sm"></span></button>
+    <button role="tab" data-view="ages" aria-selected="false"><span class="lg"></span><span class="sm"></span></button>
+    <button role="tab" data-view="places" aria-selected="false"><span class="lg"></span><span class="sm"></span></button>
+    <button role="tab" data-view="dense" aria-selected="false"><span class="lg"></span><span class="sm"></span></button>
+    <button role="tab" data-view="matrix" aria-selected="false"><span class="lg"></span><span class="sm"></span></button>
+  </nav>
+  <div class="tools">
+    <button class="btn" id="btnScale"></button>
+    <button class="btn" id="btnNow"></button>
+    <button class="btn" id="btnFilt"></button>
+    <button class="btn" id="btnData"></button>
+  </div>
+  <div class="legend on" id="legend"></div>
+</header>
+
+<div class="filters" id="filters"></div>
+<div class="filters scalebox" id="scalebox"></div>
+
+<main>
+  <section class="pane on" id="pane-chart"></section>
+  <section class="pane" id="pane-ages"></section>
+  <section class="pane" id="pane-places"></section>
+  <section class="pane" id="pane-dense"></section>
+  <section class="pane" id="pane-matrix"></section>
+</main>
+
+<div id="drawer">
+  <div class="dhead">
+    <h2 class="sec" id="dataTitle"></h2>
+    <p class="lede" id="dataLede"></p>
+  </div>
+  <div class="dbody"><div id="diags"></div><textarea id="json" spellcheck="false"></textarea></div>
+  <div class="dfoot">
+    <button class="btn" id="btnApply"></button>
+    <button class="btn" id="btnCheck"></button>
+    <button class="btn" id="btnSave"></button>
+    <button class="btn" id="btnForget"></button>
+    <button class="btn" id="btnDownload"></button>
+    <button class="btn" id="btnUpload"></button>
+    <button class="btn" id="btnReset"></button>
+    <button class="btn" id="btnClose"></button>
+    <span id="msg"></span>
+    <input type="file" id="file" accept=".json,application/json" hidden>
+  </div>
+</div>
+
+<div id="tip"></div>
+
+
+<script type="module" src="/src/ui/main.ts"></script>
+</body>
+</html>

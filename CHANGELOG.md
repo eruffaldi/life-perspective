@@ -7,6 +7,215 @@ Le versioni precedenti alla 0.3.0 non sono mai state pubblicate come tag: sono
 ricostruite qui dalla sequenza di sviluppo, per rendere leggibile come il
 progetto è arrivato alla forma attuale.
 
+## [0.9.0] — 2026-08-20
+
+### Aggiunto
+
+- **Multilingua.** Italiano e inglese, con selettore nell'intestazione, lingua
+  del browser rilevata al primo avvio e scelta conservata. Il catalogo italiano
+  **definisce il tipo**: una lingua a cui manchi una voce, o che cambi i
+  parametri di un messaggio, non compila.
+- Tradotti anche i messaggi del validatore, che sono la parte più letta quando
+  qualcosa non va. Messaggio e indicazione arrivano insieme dal catalogo, così
+  non possono finire in lingue diverse. I codici `E0xx`/`W0xx` restano stabili:
+  non sono testo.
+- I nomi dei mesi, i cicli scolastici generati, le ricorrenze, le corsie e i
+  ruoli seguono la lingua; i ruoli inventati dall'utente restano com'erano.
+
+### Corretto
+
+- **Il pulsante «Traccia dei traslochi» sembrava senza testo.** `.geoctl .btn`
+  sovrascriveva lo sfondo di `.btn.on` ma non il colore: scritta chiara su
+  fondo chiaro. Ora lo sfondo traslucido vale solo per i comandi a riposo, e
+  una sentinella in `test/styles.test.ts` intercetta chi ridefinisce lo sfondo
+  dei pulsanti senza dire cosa succede allo stato acceso.
+- Il cambio di lingua sollevava quando la textarea conteneva dati ancora da
+  correggere: ora in quel caso si ridisegna soltanto.
+
+### Note
+
+Il **domìnio resta italiano** anche quando l'interfaccia non lo è: cicli
+scolastici e validità dei documenti sono regole dello Stato italiano, non
+stringhe da tradurre. Le chiavi del formato dati restano in inglese in
+entrambe le lingue.
+
+## [0.8.0] — 2026-08-20
+
+### Modificato
+
+- **La scala del tempo si cambia da un comando esplicito, non da un gesto.**
+  Un pulsante *Scala* apre un pannello con passi − e +, cursore e quattro
+  livelli predefiniti (Tutto, Decenni, Anni, Mesi). Si apre su richiesta, quindi
+  non occupa l'intestazione né sul telefono né sul desktop, e il punto al
+  centro della finestra resta dov'è quando la scala cambia. `+` e `-` da
+  tastiera fanno lo stesso senza aprire nulla.
+- La carta ha ora pulsanti di zoom espliciti accanto a *Inquadra tutto*:
+  rotellina e pinch restano, ma non sono più l'unica via.
+
+### Rimosso
+
+- **La pinch sulle viste a scorrimento.** Dipendeva dal fatto che il browser
+  rispettasse `touch-action`, e quando non lo fa il gesto non arriva mai al
+  codice: non c'è niente da correggere dal lato nostro. Tenerla sarebbe stato
+  tenere una promessa che il dispositivo può rompere. Resta sulla carta, dove
+  l'elemento non scorre e il gesto si può prendere per intero.
+- Il cursore fisso della scala nell'intestazione, sostituito dal pannello.
+
+## [0.7.2] — 2026-08-20
+
+### Corretto
+
+- **La pinch sul grafico ingrandiva la pagina invece di cambiare la scala.**
+  Mancava `touch-action` sulle viste: il browser interpreta il gesto a due dita
+  come zoom della pagina e decide *prima* che gli eventi arrivino al codice, per
+  cui il gestore non veniva mai eseguito. `preventDefault` su `pointermove` non
+  serve a nulla in questo caso, la decisione si prende dal CSS. Ora `.pane`
+  dichiara `touch-action: pan-x pan-y`: lo scorrimento resta al browser, la
+  pinch arriva a noi.
+- In modalità `pinchOnly` il puntatore non viene più catturato: la cattura
+  toglieva al browser il flusso di eventi che gli serve per scorrere.
+
+## [0.7.1] — 2026-08-20
+
+### Corretto
+
+- **Etichette sovrapposte sul grafico.** C'erano tre criteri diversi per lo
+  stesso compito, e due erano ingenui: guardavano solo lo spazio fino
+  all'elemento successivo. Quel criterio sbaglia in entrambe le direzioni —
+  nasconde una scritta perché il vicino è vicino, anche quando il vicino è a
+  sua volta nascosto e non occupa nulla; e non si accorge di niente quando è la
+  scritta a sbordare in avanti oltre chi la segue. Ora c'è un solo algoritmo in
+  `src/ui/labels.ts`, usato da marcatori, barre e pin della carta: si ordina
+  per importanza e si colloca chi non collide.
+- Le etichette delle barre non erano vagliate affatto: sbordavano l'una
+  sull'altra dentro la stessa corsia.
+
+### Modificato
+
+- **L'intestazione non si mangia più lo schermo sul telefono.** Sotto i 720px
+  le schede scendono in una barra in fondo — dove arriva il pollice — con
+  etichette brevi, e in alto resta una riga sola. La legenda sparisce dove il
+  gesto che descrive non esiste, cioè su qualsiasi dispositivo senza hover.
+- Le altezze delle due barre sono misurate, non indovinate: la vista occupa
+  esattamente lo spazio che resta, anche ruotando il telefono.
+- Sul telefono il cursore della scala lascia il posto alla **pinch sul
+  grafico**, mentre lo scorrimento a un dito resta al browser. Da mouse la
+  rotellina continua a scorrere; per zoomare c'è il cursore, o `Ctrl` più
+  rotellina.
+
+## [0.7.0] — 2026-08-20
+
+### Aggiunto
+
+- **Applicazione web installabile.** La build produce ora due uscite dallo
+  stesso bundle: `prospettiva.html` autosufficiente per il doppio clic, e
+  `index.html` con manifest, service worker e icone per GitHub Pages. Il corpo
+  è identico — un test verifica che non divergano.
+- Service worker con precarico e servizio dalla cache: dopo la prima apertura
+  la rete non viene più interrogata per il contenuto. Il nome della cache
+  deriva dall'impronta dell'artefatto, quindi cambia solo quando cambia
+  davvero qualcosa.
+- Avviso discreto quando è pronta una versione nuova, con ricarico a scelta
+  dell'utente invece che imposto.
+- `navigator.storage.persist()` all'avvio: su un'origine ospitata il
+  `localStorage` è memoria sacrificabile finché non si chiede il contrario.
+- Icone generate dal linguaggio visivo dell'applicazione: corsie di vita
+  attraversate dal meridiano magenta di «oggi», con variante ritagliabile.
+- `.github/workflows/pages.yml` pubblica a ogni push su `main`, ma solo dopo
+  che la suite è passata: un test rotto non deve sostituire l'installazione
+  che le persone hanno già sul telefono.
+- `make pages` per l'anteprima locale con il service worker attivo, e
+  `docs/pubblicazione.md`.
+
+### Corretto
+
+- **Il segnaposto di build nel service worker non veniva sostituito.** Una
+  `replace` semplice colpiva la prima occorrenza, che era in un commento: la
+  costante restava intatta, la cache si sarebbe chiamata sempre allo stesso
+  modo e gli aggiornamenti non sarebbero mai arrivati ai dispositivi già
+  installati. La sostituzione è ora globale e verificata.
+
+## [0.6.0] — 2026-08-20
+
+### Aggiunto
+
+- **Navigazione a tocco.** `src/ui/gestures.ts` gestisce pan a un dito, pinch a
+  due e riconoscimento del tap con Pointer Events, tenendo la matematica
+  separata dal DOM. Su touch `wheel` non esiste: lo zoom non si poteva ottenere
+  adattando gli eventi del mouse.
+- Il tooltip — il gesto centrale dell'applicazione — si apre a tocco e si
+  chiude toccando altrove quando il dispositivo non ha hover.
+- Aree sensibili da polpastrello: i marcatori passano da 16 a 44 pixel e i pin
+  ricevono un bersaglio invisibile più largo del cerchio, entrambi solo sotto
+  `(pointer: coarse)`.
+- `touch-action: none` sulla carta: senza, il browser intercetta il gesto e lo
+  trasforma in scorrimento della pagina.
+- **Confezionamento Android.** `make android` incapsula lo stesso
+  `dist/prospettiva.html` in un APK via Capacitor, con la toolchain in una fase
+  Docker separata. Perimetro e limiti in `android/README.md`.
+
+### Corretto
+
+- `.geomap.drag` era rimasta senza codice che la attivasse dopo il passaggio ai
+  gesti: il cursore a manina è tornato. Trovata da `test/styles.test.ts`.
+
+## [0.5.1] — 2026-08-20
+
+### Modificato
+
+- Il foglio di stile monolitico si divide seguendo i moduli: ogni vista importa
+  il proprio `.css`, e `src/styles/` tiene solo token, fondamenta e atomi
+  tipografici condivisi. Le regole erano finite fuori posto per accumulo —
+  `.bar.doc`, `.bar.tiny` e la legenda vivevano nella sezione del cassetto dati.
+- Il rendering è invariato: il confronto regola per regola prima e dopo mostra
+  178 → 176 blocchi, nessuno modificato, e la carta rasterizzata è identica al
+  pixel.
+
+### Aggiunto
+
+- `test/styles.test.ts`: verifica che nessuna classe sopravviva al codice che
+  la usava, che ogni id abbia un elemento nel markup e che non esistano
+  `var(--…)` senza definizione. 213 test in totale.
+
+### Rimosso
+
+- Due regole morte: `.saved` e `.filters label .c`, rimaste da revisioni
+  precedenti.
+
+## [0.5.0] — 2026-08-20
+
+Riscrittura in TypeScript. **Nessun cambiamento visibile all'utente**: le
+cinque viste, i filtri, la validazione e il formato dati sono identici.
+
+### Modificato
+
+- Il sorgente passa da un unico file HTML di 1789 righe a diciassette moduli
+  TypeScript in `strict`, con `noUncheckedIndexedAccess`, `noUnusedLocals` e
+  `noUnusedParameters`. Il dominio (`src/core/`) non tocca il DOM.
+- Introdotti Vite e `vite-plugin-singlefile`: la proprietà di file unico non è
+  più una caratteristica del sorgente ma un risultato della build, verificato
+  da `tools/verify.mjs`.
+- I tipi distinguono `Raw*` (ciò che l'utente scrive) da `Model*` (ciò che i
+  renderer consumano), con `build()` come unico ponte.
+- La suite passa a Vitest: undici file di unità sui moduli puri più due di
+  integrazione sull'artefatto costruito. 204 test.
+- `tools/validate.mjs` importa il validatore dal sorgente TypeScript tramite
+  vite-node, invece di estrarlo dall'HTML costruito.
+- `make dev` avvia il server Vite con ricarica a caldo.
+
+### Corretto
+
+- **Bundle ESM non eseguibile da `file://`.** `vite-plugin-singlefile` inlinea
+  come `<script type="module">`, e Chrome blocca i moduli sugli origin opachi:
+  l'artefatto non sarebbe partito con il doppio clic, che è il modo in cui
+  questa applicazione vive. La build forza ora il formato IIFE, toglie
+  l'attributo residuo e fallisce se trova sintassi di modulo nell'output.
+
+### Rimosso
+
+- `tools/build.mjs` e il segnaposto `__COAST__`: la base cartografica è ora un
+  normale `import` di JSON, inlineato da Vite.
+
 ## [0.4.1] — 2026-08-20
 
 ### Aggiunto

@@ -1,21 +1,29 @@
 {
   "name": "prospettiva",
-  "version": "0.4.1",
+  "version": "0.9.0",
   "description": "Carta del tempo: vite, scuole, scadenze e luoghi di una famiglia in un solo file HTML offline",
   "type": "module",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "node tools/build.mjs",
+    "build": "tsc --noEmit && vite build && node tools/verify.mjs",
+    "dev": "vite",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && vitest run",
+    "test:watch": "vitest",
     "coast": "node tools/gen-coast.mjs",
-    "test": "node test/app.test.mjs && node test/validate.test.mjs && node test/storage.test.mjs",
-    "serve": "node --run build && node -e \"import('node:http').then(({default:h})=>import('node:fs').then(({default:f})=>h.createServer((q,s)=>{s.writeHead(200,{'content-type':'text/html;charset=utf-8'});s.end(f.readFileSync('dist/prospettiva.html'))}).listen(8080,()=>console.log('http://localhost:8080'))))\"",
     "validate": "node tools/validate.mjs"
   },
   "devDependencies": {
-    "ajv": "^8.20.0",
+    "@types/jsdom": "^30.0.0",
+    "@types/node": "^26.2.0",
+    "ajv": "^8.17.1",
     "jsdom": "^26.0.0",
     "topojson-client": "^3.1.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.0.0",
+    "vite-plugin-singlefile": "^2.1.0",
+    "vitest": "^3.0.0",
     "world-atlas": "^2.0.2"
   }
 }

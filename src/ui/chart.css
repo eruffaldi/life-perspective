@@ -1,0 +1,90 @@
+/* Cronologia ed eta' allineate: assi, corsie, barre, marcatori */
+
+.inner{position:relative; width:max-content; min-width:100%; padding-bottom:60px}
+.grid{position:absolute; top:0; bottom:0; left:var(--gutter); pointer-events:none; z-index:0}
+.gline{position:absolute; top:0; bottom:0; width:1px; background:var(--rule-soft)}
+.gline.dec{background:var(--rule)}
+.futurewash{position:absolute; top:0; bottom:0; background:
+  repeating-linear-gradient(-45deg, rgba(13,43,58,.028) 0 2px, transparent 2px 7px);}
+.meridian{position:absolute; top:0; bottom:0; width:1.5px; background:var(--now); z-index:6}
+.meridian::before{
+  content:attr(data-label); position:absolute; top:40px; left:5px;
+  font-family:var(--data); font-size:9.5px; letter-spacing:.14em; color:var(--now);
+  writing-mode:vertical-rl; text-transform:uppercase;
+}
+
+.axis{position:sticky; top:0; z-index:10; background:var(--paper); border-bottom:1px solid var(--ink); display:flex}
+.axis .lab{
+  position:absolute; bottom:3px; transform:translateX(-50%);
+  font-family:var(--data); font-size:10.5px; letter-spacing:.05em; color:var(--ink-soft);
+  white-space:nowrap;
+}
+.axis .tick{position:absolute; bottom:0; width:1px; height:5px; background:var(--rule)}
+.axis .tick.dec{height:9px; background:var(--ink-soft)}
+.axisrow{position:relative; height:34px; flex:1 0 auto}
+.axishead{
+  position:sticky; left:0; flex:0 0 var(--gutter); width:var(--gutter); height:34px;
+  background:var(--paper); border-right:1px solid var(--rule); z-index:2;
+  display:flex; align-items:flex-end; padding:0 10px 6px;
+  font-family:var(--data); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft);
+}
+
+.person{position:relative; z-index:1}
+.person + .person{border-top:1px solid var(--rule-soft)}
+.prow{display:flex; align-items:stretch; min-height:var(--rowh)}
+.plabel{
+  position:sticky; left:0; z-index:5; flex:0 0 var(--gutter); width:var(--gutter);
+  background:var(--paper); border-right:1px solid var(--rule);
+  padding:4px 10px 4px 12px; display:flex; align-items:center; gap:7px;
+}
+.prow.head .plabel{padding-top:9px; padding-bottom:3px}
+.swatch{flex:0 0 3px; align-self:stretch; margin:1px 0; border-radius:1px}
+.pname{font-family:var(--display); font-size:15px; line-height:1.15}
+.pmeta{font-family:var(--data); font-size:10px; color:var(--ink-soft); letter-spacing:.04em}
+.tname{font-family:var(--data); font-size:9.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-soft)}
+.track{position:relative; flex:1 0 auto; height:var(--rowh)}
+.prow.head .track{height:24px}
+
+.lifebar{
+  position:absolute; top:50%; transform:translateY(-50%); height:5px; border-radius:3px;
+  background:var(--lane);
+}
+.bar{
+  position:absolute; top:3px; height:calc(var(--rowh) - 9px); border-radius:2px;
+  background:currentColor; opacity:.16; border:1px solid currentColor;
+  display:flex; align-items:center; overflow:visible; cursor:default;
+}
+.bar.open{border-right-style:dashed; -webkit-mask-image:linear-gradient(to right,#000 72%,rgba(0,0,0,.25));mask-image:linear-gradient(to right,#000 72%,rgba(0,0,0,.25))}
+.bar.circa{border-style:dashed}
+.barlab{
+  position:absolute; left:6px; white-space:nowrap; font-size:11px; line-height:1;
+  color:var(--ink); opacity:1; pointer-events:none;
+}
+.barwrap{position:absolute; top:0; height:var(--rowh); display:flex; align-items:center; cursor:default}
+.mk{
+  position:absolute; top:50%; width:9px; height:9px; margin:-4.5px 0 0 -4.5px;
+  background:currentColor; transform:rotate(45deg); cursor:default;
+}
+.mk.soft{background:var(--paper); border:1.5px solid currentColor}
+.mk.rec{width:7px;height:7px;margin:-3.5px 0 0 -3.5px; border-radius:50%; transform:none; background:var(--paper); border:1.5px solid currentColor}
+.mklab{
+  position:absolute; top:50%; transform:translateY(-50%); white-space:nowrap;
+  font-size:11px; pointer-events:none; margin-left:9px; color:var(--ink);
+}
+.hit{position:absolute; top:0; height:var(--rowh); width:16px;
+  transform:translateX(-50%); cursor:default}
+@media (pointer:coarse){
+  /* Un dito copre circa 44px: sotto quella misura i marcatori sono inservibili. */
+  .hit{width:44px}
+}
+
+.contextlane .plabel .pname{font-size:13px; font-style:italic}
+
+/* Varianti di barra: i documenti sono tenui, e sotto i quattro pixel una
+   barra diventa un segno pieno invece di sparire. */
+.bar.doc{opacity:.10; border-style:dotted}
+.bar.tiny{border-radius:1px; opacity:.42}
+
+@media (max-width:720px){
+  :root{--gutter:126px}
+}

@@ -2,4 +2,7 @@ node_modules
 dist
 .git
 *.log
-prospettiva-dev
+.docker-stamp
+android/app
+android/.gradle
+.android-stamp

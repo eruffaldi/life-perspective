@@ -11,11 +11,16 @@ nessun account. Lo apri con doppio clic e funziona, anche in aereo o in barca.
 
 ```
 make build      # produce dist/prospettiva.html
-make test       # 248 test di regressione
+make test       # 204 test: unità sui moduli, integrazione sull'artefatto
+make dev        # server con ricarica a caldo su :5173
 make serve      # http://localhost:8080
 ```
 
 L'unico prerequisito è Docker. Non serve Node installato.
+
+Sul telefono si arriva per due strade — applicazione web installabile o APK —
+e in entrambi i casi si confeziona **lo stesso artefatto**: non c'è un secondo
+progetto e non c'è un secondo codice.
 
 ---
 
@@ -42,6 +47,21 @@ Il gesto centrale è il passaggio del mouse: sopra qualsiasi barra o rombo
 compare l'età di **tutti** in quel momento.
 
 ---
+
+## Lingue
+
+Italiano e inglese, con il selettore in alto a sinistra. Al primo avvio si
+segue la lingua del browser; la scelta viene conservata. Cambia tutto, compresi
+i messaggi di errore e le etichette generate — i cicli scolastici diventano
+*High school*, le ricorrenze *25 years — …*.
+
+Il **domìnio resta italiano** anche quando l'interfaccia non lo è: i cicli
+scolastici e le validità dei documenti sono regole dello Stato italiano, non
+stringhe. E le chiavi del formato dati restano in inglese in entrambe le
+lingue, così un file scritto in italiano si apre identico in inglese.
+
+Per aggiungere una lingua basta un file in `src/i18n/`: il catalogo italiano
+definisce il tipo, quindi il compilatore elenca ciò che manca.
 
 ## Il formato dei dati
 
@@ -284,36 +304,118 @@ decisione aperta sul bundler. Viene letto all'inizio di ogni sessione: se
 correggi Claude su qualcosa che vale anche per la prossima volta, quello è il
 posto dove metterlo.
 
+## Sul telefono
+
+Due strade, e per una famiglia conviene la prima.
+
+**Applicazione web installabile (PWA).** `dist/` contiene già `index.html`, il
+manifest, il service worker e le icone: si pubblica su GitHub Pages e si
+installa da Chrome con *Aggiungi a schermata Home*. Dopo la prima apertura
+tutto viene servito dalla cache, senza toccare la rete. Il vantaggio vero non è
+l'assenza di toolchain: è che un push aggiorna l'applicazione su tutti i
+dispositivi, mentre un APK va reinstallato a mano ogni volta. Funziona anche su
+iPhone e su qualsiasi desktop. Dettagli e limiti in
+[docs/pubblicazione.md](docs/pubblicazione.md).
+
+```
+make pages          # anteprima locale, service worker attivo
+```
+
+**APK.** `make android` incapsula lo stesso artefatto in una WebView via
+Capacitor: nessun server, nessuna prima apertura online. È la risposta se
+l'offline deve valere anche al primissimo avvio. Perimetro in
+[android/README.md](android/README.md).
+
+Sotto i 720px le schede scendono in una barra in fondo, con etichette brevi, e
+in alto resta una riga sola: su un telefono l'intestazione su tre righe lasciava
+poco schermo alla carta, che è l'unica cosa che conta.
+
+**Ogni funzione è raggiungibile senza gesti.** La scala del tempo si cambia dal
+pulsante *Scala*, che apre passi, cursore e livelli predefiniti; la carta ha
+pulsanti di zoom accanto a *Inquadra tutto*. I gesti — trascinamento e pinch
+sulla carta, rotellina — restano come scorciatoia, mai come sola strada:
+dipendono dal fatto che il browser rispetti `touch-action`, e non tutti lo
+fanno.
+
+Il tocco non è il mouse, e non basta un involucro. La carta si naviga con
+pan a un dito e pinch a due (`wheel` su touch non esiste); il tooltip, che con
+il mouse segue il passaggio sopra, sul telefono si apre a tocco e si chiude
+toccando altrove; le aree sensibili dei marcatori passano da 16 a 44 pixel
+sotto un puntatore grossolano. La matematica dei gesti sta in
+`src/ui/gestures.ts`, separata dal DOM perché sia verificabile senza browser.
+
+In entrambi i casi il salvataggio sul dispositivo è comodità, non archivio: il
+file esportato resta la copia buona.
+
 ## Struttura del repository
 
 ```
-src/index.html        il sorgente: tutta l'app, con il segnaposto __COAST__
-src/coast.json        base cartografica generata (committata: build riproducibile offline)
+index.html            lo scheletro: markup e basta
+src/styles/           token, fondamenta, atomi tipografici condivisi
+src/core/             dominio puro, senza DOM
+  types.ts              Raw* (ciò che scrivi) contro Model* (ciò che si disegna)
+  date.ts               date a precisione variabile, trattate come intervalli
+  age.ts                età e distanze
+  school.ts             cicli scolastici italiani generati dalla nascita
+  documents.ts          validità dei documenti e catena dei rinnovi
+  tracks.ts             corsie, categorie, filtri di default
+  model.ts              build(): unico ponte fra Raw e Model
+src/validate/         scanner di posizioni e validatore
+src/geo/              proiezione, repertorio dei luoghi, raccolta
+src/ui/               viste, pannelli, persistenza, avvio
+                      ogni vista porta accanto il proprio .css
+src/data/             dati d'esempio e base cartografica generata
 schema/               JSON Schema del formato dati
 docs/requisiti.md     requisiti e catalogo dei codici di diagnostica
-tools/build.mjs       inietta la costa e verifica che non restino riferimenti esterni
-tools/gen-coast.mjs   rigenera coast.json da Natural Earth
+tools/verify.mjs      cancello di build: autosufficienza e formato dello script
+tools/gen-coast.mjs   rigenera src/data/coast.json da Natural Earth
 tools/validate.mjs    valida un file di dati da riga di comando
-test/                 248 test su jsdom
+test/                 11 file di unità + integrazione sull'artefatto costruito
 dist/                 artefatto costruito (non versionato)
 ```
 
-### Perché niente bundler
+### Il sorgente è modulare, l'artefatto no
 
-Il sorgente è già un file singolo senza dipendenze a runtime: non c'è nulla da
-impacchettare. Aggiungere Vite e `vite-plugin-singlefile` significherebbe
-introdurre una toolchain per ottenere una proprietà che il sorgente ha già per
-costruzione. L'unico passo di build è l'iniezione di `coast.json`, ed è un
-`String.replace`.
+TypeScript in `strict`, con `noUncheckedIndexedAccess`, `noUnusedLocals` e
+`noUnusedParameters`. Vite più `vite-plugin-singlefile` reinlineano JS, CSS e
+base cartografica in un unico HTML senza riferimenti esterni; `tools/verify.mjs`
+fallisce se ne resta anche uno.
 
-Il rovescio della medaglia va detto: niente TypeScript, niente type checking,
-niente HMR. Il presidio contro le regressioni è la suite di test, non il
-compilatore. Se il progetto dovesse crescere fino a rendere insostenibile un
-sorgente unico, la porta d'ingresso naturale è proprio `tools/build.mjs`.
+**Il bundle è IIFE, non ESM.** Uno script `type="module"` non viene eseguito
+quando la pagina è aperta via `file://` — Chrome lo blocca per la policy sugli
+origin opachi — e `file://` è il modo in cui questa applicazione vive. La
+build forza il formato IIFE, toglie l'attributo residuo e verifica che non
+resti sintassi di modulo nell'output.
 
-`src/coast.json` è committato di proposito: 151 KB di geometria generata,
+`src/data/coast.json` è committato di proposito: 151 KB di geometria generata,
 così `make build` funziona senza rete. `make coast` la rigenera quando serve
 cambiare tolleranza o riquadro.
+
+### Il CSS
+
+Non c'è un foglio unico: ogni vista importa il proprio, accanto al modulo che
+lo usa. `src/styles/` tiene solo ciò che è davvero condiviso — i token, le
+fondamenta e una manciata di atomi tipografici usati da tre viste su cinque.
+
+`tokens.css` è l'unico posto dove si dichiarano colori e famiglie di caratteri.
+I caratteri sono stack di sistema: un font remoto violerebbe l'autosufficienza.
+
+Il CSS è l'unica cosa rimasta a legare fra loro moduli altrimenti indipendenti,
+quindi ha un presidio suo: `test/styles.test.ts` verifica che nessuna classe
+sopravviva al codice che la usava, che ogni id abbia un elemento nel markup, e
+che non esistano `var(--…)` senza definizione. Sono errori che nessun
+compilatore segnala.
+
+### I test
+
+Undici file di unità sui moduli puri — le date come intervalli, gli scalini di
+validità della patente, la propagazione dei ritardi scolastici, la precedenza
+nella risoluzione dei luoghi — e due file di integrazione che girano su
+`dist/prospettiva.html`, cioè su ciò che si spedisce.
+
+Ogni regressione nota ha un test che la nomina. In jsdom il boot avviene dopo
+`DOMContentLoaded`, che è asincrono: le asserzioni sul DOM attendono, altrimenti
+misurerebbero una pagina vuota e passerebbero per sbaglio.
 
 ### La base cartografica
 
@@ -335,11 +437,15 @@ il resto veniva decodificato come delta da zero.
 | comando        | effetto                                              |
 |----------------|------------------------------------------------------|
 | `make build`   | produce `dist/prospettiva.html`                      |
-| `make test`    | suite di regressione sull'artefatto costruito        |
+| `make test`    | typecheck, build e suite completa                    |
+| `make typecheck` | solo il controllo dei tipi                        |
+| `make dev`     | server Vite con ricarica a caldo su `:5173`          |
 | `make validate`| valida un file: `make validate FILE=dati.json`       |
 | `make check`   | build e collaudo dentro Docker, senza montare nulla  |
 | `make coast`   | rigenera `src/coast.json` (richiede rete)            |
 | `make serve`   | pubblica su `http://localhost:8080`                  |
+| `make pages`   | anteprima locale della PWA, service worker attivo    |
+| `make android` | confeziona `dist/prospettiva.apk`                    |
 | `make dev`     | shell nel contenitore                                |
 | `make clean`   | rimuove `dist`                                       |
 

@@ -1,0 +1,27 @@
+/* Anni densi e matrice: due letture dello stesso elenco di momenti */
+
+.year{border-top:1px solid var(--rule); padding:14px 0 16px; display:grid; grid-template-columns:120px 1fr; gap:20px}
+.year:last-child{border-bottom:1px solid var(--rule)}
+.ynum{font-family:var(--display); font-size:30px; line-height:1; letter-spacing:-.01em}
+.ydist{font-family:var(--data); font-size:10.5px; color:var(--ink-soft); letter-spacing:.06em; margin-top:5px}
+.ynum.past{color:var(--ink-soft)}
+.ylist{display:flex; flex-direction:column; gap:7px}
+.itm{display:flex; gap:9px; align-items:baseline}
+.itxt{flex:1}
+.nextup{margin:0 0 30px}
+.nextgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(178px,1fr)); gap:16px 20px}
+.nx{border-left:2px solid currentColor; padding-left:11px}
+.nxdist{font-family:var(--data); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:currentColor}
+.nxlab{font-family:var(--display); font-size:15px; line-height:1.2; margin:2px 0 1px}
+table.mx{width:100%; border-collapse:collapse; font-size:13px}
+table.mx th,table.mx td{padding:6px 10px; border-bottom:1px solid var(--rule-soft); text-align:left}
+table.mx th{font-family:var(--data); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); border-bottom:1px solid var(--ink); position:sticky; top:0; background:var(--paper)}
+table.mx td.n,table.mx th.n{text-align:right; font-family:var(--data); font-variant-numeric:tabular-nums}
+table.mx td.when{font-family:var(--data); font-size:11.5px; color:var(--ink-soft); white-space:nowrap}
+table.mx tr:hover td{background:var(--paper-2)}
+.mxlab{display:flex; align-items:center; gap:7px}
+.mxlab .dot{margin-top:0}
+
+@media (max-width:720px){
+  .year{grid-template-columns:1fr; gap:6px}
+}

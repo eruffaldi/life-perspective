@@ -1,0 +1,35 @@
+/* Vocabolario visivo: carta nautica chiara, inchiostro blu, magenta di
+   correzione per il presente. Nessun altro file dichiara colori o famiglie
+   di caratteri: se serve una tinta nuova, si aggiunge qui.
+
+   I caratteri sono stack di sistema, non font remoti: l'artefatto non fa
+   richieste di rete */
+
+:root{
+  --paper:#E7EDEE;
+  --paper-2:#DDE6E7;
+  --ink:#0D2B3A;
+  --ink-soft:#4E656D;
+  --rule:#B7C7CA;
+  --rule-soft:#CBD8DA;
+  --now:#B3216B;
+  --lane:#D5E0E1;
+  --future:#EFF3F3;
+
+  --p1:#16606B; --p2:#98402F; --p3:#35407E; --p4:#9A7412; --p5:#4E656D; --p6:#6B3A6E;
+
+  --display:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+  --ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --data:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+
+  --gutter:186px;
+  --rowh:26px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--ui); font-size:14px; line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select{font:inherit;color:inherit}

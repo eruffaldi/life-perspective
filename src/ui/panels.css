@@ -1,0 +1,75 @@
+/* Cassetto dei dati, diagnostica e pannello dei filtri:
+   le parti dell'interfaccia che parlano dei dati invece che del tempo */
+
+#drawer{
+  position:absolute; inset:0; top:var(--headh,58px); background:var(--paper); z-index:30;
+  display:none; grid-template-rows:auto 1fr auto;
+}
+#drawer.on{display:grid}
+#drawer .dhead{padding:16px 22px 8px; max-width:1080px; margin:0 auto; width:100%}
+#drawer textarea{
+  width:100%; height:100%; resize:none; border:1px solid var(--rule); border-radius:2px;
+  font-family:var(--data); font-size:12.5px; line-height:1.6; padding:12px 14px;
+  background:#fff; color:var(--ink); tab-size:2;
+}
+#drawer .dbody{padding:0 22px; max-width:1080px; margin:0 auto; width:100%; min-height:0;
+  display:flex; flex-direction:column}
+#drawer .dfoot{padding:12px 22px 18px; max-width:1080px; margin:0 auto; width:100%; display:flex; gap:9px; align-items:center}
+#msg{font-family:var(--data); font-size:11.5px; letter-spacing:.04em}
+#msg.err{color:var(--now)}
+
+#diags{max-height:34vh; overflow:auto; margin:0 0 12px; border:1px solid var(--rule); border-radius:2px; display:none}
+#diags.on{display:block}
+#diags .dg{display:grid; grid-template-columns:auto 1fr; gap:2px 10px; padding:9px 12px;
+  border-bottom:1px solid var(--rule-soft); cursor:pointer; background:var(--paper)}
+#diags .dg:last-child{border-bottom:0}
+#diags .dg:hover{background:var(--paper-2)}
+#diags .lv{font-family:var(--data); font-size:9.5px; letter-spacing:.1em; padding:2px 5px;
+  border-radius:2px; align-self:start; margin-top:2px}
+#diags .dg.error .lv{background:var(--now); color:var(--paper)}
+#diags .dg.warning .lv{background:var(--paper-2); color:var(--ink-soft); border:1px solid var(--rule)}
+#diags .ms{font-size:13.5px}
+#diags .pt{grid-column:2; font-family:var(--data); font-size:10.5px; color:var(--ink-soft); letter-spacing:.03em}
+#diags .hn{grid-column:2; font-size:12.5px; color:var(--ink-soft); margin-top:2px}
+#diags .hd{padding:8px 12px; border-bottom:1px solid var(--ink); background:var(--paper-2);
+  font-family:var(--data); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft)}
+.btn.warn{border-color:var(--now); color:var(--now)}
+
+.filters{
+  position:absolute; right:18px; z-index:40; min-width:216px;
+  background:var(--paper); border:1px solid var(--ink); border-radius:2px;
+  padding:12px 14px 13px; box-shadow:0 10px 30px rgba(13,43,58,.16); display:none;
+}
+.filters.on{display:block}
+.filters h4{font-family:var(--data); font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-soft); font-weight:400; margin:0 0 8px}
+.filters label{display:flex; align-items:center; gap:8px; padding:3px 0; cursor:pointer; font-size:13px}
+.filters label input{accent-color:var(--now); margin:0}
+.filters label.off{color:var(--ink-soft)}
+.filters .fcount{margin-left:auto; font-family:var(--data); font-size:10.5px; color:var(--ink-soft)}
+.filters .fbtns{display:flex; gap:6px; margin-top:10px; padding-top:9px; border-top:1px solid var(--rule-soft)}
+.filters .fbtns button{flex:1; font-size:11.5px; padding:3px 6px}
+
+/* Avviso di versione nuova: informa, non interrompe. */
+.update{display:inline-flex; align-items:center; gap:9px}
+.update .btn{padding:2px 9px; font-size:11.5px}
+
+/* Pannello della scala: stessa forma dei filtri, contenuto diverso. */
+.scalebox .scalerow{display:flex; align-items:center; gap:8px; margin-bottom:10px}
+.scalebox .scalerow .btn{
+  flex:0 0 34px; height:32px; font-size:17px; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+}
+.scalebox .scalerow input[type=range]{flex:1; min-width:110px; accent-color:var(--now)}
+.scalebox .presets{display:grid; grid-template-columns:repeat(2,1fr); gap:6px}
+.scalebox .presets .btn{padding:7px 4px; font-size:12px}
+.scaleval{
+  margin-top:10px; padding-top:8px; border-top:1px solid var(--rule-soft);
+  font-family:var(--data); font-size:10.5px; color:var(--ink-soft); letter-spacing:.03em;
+}
+@media (pointer:coarse){
+  /* Bersagli da polpastrello: qui si tocca, non si punta. */
+  .scalebox .scalerow .btn{flex-basis:44px; height:44px}
+  .scalebox .presets .btn{padding:12px 4px}
+  .scalebox input[type=range]{height:32px}
+}

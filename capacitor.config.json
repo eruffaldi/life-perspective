@@ -1,0 +1,11 @@
+{
+  "appId": "org.prospettiva.app",
+  "appName": "Prospettiva",
+  "webDir": "dist",
+  "android": {
+    "webContentsDebuggingEnabled": false
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
