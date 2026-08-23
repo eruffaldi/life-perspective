@@ -97,10 +97,16 @@ function load(data: RawDocumentRoot): void {
 
   document.title = t().app.documentTitle(state.model.title);
   const anchor = state.model.anchor;
-  const age = ageText(anchor, nowDate(state.model), state.model.settings.ageDisplay);
-  must("#anchorline").textContent =
-    anchor.name + " · " + age.txt + " · " + t().app.today + " " +
-    fmtDate(parseDate(new Date().toISOString().slice(0, 10)));
+  // Chi non è più in vita non ha un'età «oggi»: mostrare un trattino sarebbe
+  // corretto e inutile. Per queste persone si dice l'arco della vita.
+  must("#anchorline").textContent = anchor.death
+    ? anchor.name + " · " + t().app.lifespan(
+        fmtDate(anchor.birth), fmtDate(anchor.death),
+        Math.floor(anchor.death.mid - anchor.birth.mid))
+    : anchor.name + " · " +
+      ageText(anchor, nowDate(state.model), state.model.settings.ageDisplay).txt +
+      " · " + t().app.today + " " +
+      fmtDate(parseDate(new Date().toISOString().slice(0, 10)));
 
   draw();
   if (state.view === "chart") requestAnimationFrame(scrollToNow);

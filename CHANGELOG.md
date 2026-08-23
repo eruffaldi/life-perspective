@@ -7,6 +7,44 @@ Le versioni precedenti alla 0.3.0 non sono mai state pubblicate come tag: sono
 ricostruite qui dalla sequenza di sviluppo, per rendere leggibile come il
 progetto è arrivato alla forma attuale.
 
+## [0.10.0] — 2026-08-20
+
+### Modificato
+
+- **Le etichette dei periodi restano dentro il rettangolo**, troncate quando
+  non ci stanno. Prima sbordavano: «Scuola Normale Superiore» arrivava fino al
+  1925 su una barra che finiva nel 1922, e il periodo sembrava durare tre anni
+  di più. Fra una parola tagliata e una durata falsa, il troncamento mente
+  meno. Escono ancora solo le barre sotto i diciotto pixel, dove dentro non
+  entrerebbe una lettera, e quelle si vagliano fra loro come prima.
+- **I marcatori non perdono più l'etichetta: scendono di riga.** La corsia degli
+  eventi cresce fino a quattro righe e un rigo verticale lega ogni rombo alla
+  sua scritta. Sui dati di Fermi si passa da cinque etichette visibili su
+  tredici a tredici su tredici.
+- `assignLanes` in `src/ui/labels.ts` affianca `placeLabels`: dove c'è un
+  «sotto» libero si distribuisce, dove non c'è — i pin di una carta — si
+  continua a scegliere.
+
+## [0.9.1] — 2026-08-20
+
+Difetti emersi provando l'applicazione su un insieme di dati reale — nove vite
+del gruppo di via Panisperna, tutte concluse.
+
+### Corretto
+
+- **La riga di intestazione mostrava un trattino per una persona non più in
+  vita.** L'applicazione dava implicitamente per scontato che la persona di
+  riferimento fosse viva: chiedere la sua età «oggi» è corretto e inutile. Ora
+  per chi è morto si mostra l'arco della vita e l'età raggiunta.
+- **Un solo dato sbagliato produceva ventitré avvisi derivati.** Una data di
+  morte impossibile faceva scattare «successivo alla morte» per ogni evento e
+  ogni periodo di quella persona, seppellendo l'unica segnalazione che
+  contava. Ora gli avvisi sulla collocazione nella vita vengono soppressi per
+  chi ha già un errore sull'arco vitale: chi corregge la causa vede sparire il
+  resto da solo.
+- `tools/validate.mjs` non stampa più il rumore della scansione delle
+  dipendenze di Vite.
+
 ## [0.9.0] — 2026-08-20
 
 ### Aggiunto

@@ -192,10 +192,18 @@ rimetterla com'era in `afterEach`.
 
 ## Etichette
 
-**Un solo algoritmo, in `src/ui/labels.ts`**, per marcatori, barre e pin. Se
-serve etichettare qualcosa di nuovo, si passa da lì: contare lo spazio fino
+**Tutto in `src/ui/labels.ts`**, con due strategie e un criterio per
+scegliere. `assignLanes` distribuisce su più righe e non perde nulla: si usa
+dove esiste un «sotto» libero, cioè i marcatori. `placeLabels` sceglie chi
+mostrare: si usa dove quel sotto non c'è, cioè i pin sulla carta.
+
+Se serve etichettare qualcosa di nuovo si passa da lì: contare lo spazio fino
 all'elemento successivo sembra equivalente e non lo è, perché ignora sia i
 vicini nascosti sia le scritte che sbordano in avanti.
+
+**Le etichette dei periodi vivono dentro la barra**, confinate dal CSS
+(`.barwrap.inside`), non dalla misura del testo. Una scritta che sborda non è
+un difetto estetico: fa leggere una durata sbagliata.
 
 La larghezza è **stimata**, non misurata: misurarla davvero costringerebbe a un
 reflow per etichetta, centinaia per ridisegno. La stima è per eccesso — meglio

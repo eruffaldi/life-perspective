@@ -17,6 +17,8 @@ export const en: Messages = {
     title: "Prospettiva",
     documentTitle: (name: string) => name + " — a chart of time",
     today: "today",
+    lifespan: (birth: string, death: string, age: number) =>
+      birth + " – " + death + " · " + age + " years",
     year: "Year",
     age: "Age",
     unknown: "—"

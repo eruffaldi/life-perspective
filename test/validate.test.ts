@@ -86,6 +86,19 @@ describe("coerenza temporale", () => {
     expect(emits(d => { d.people![4]!.death = "1900"; }, "E010")).toBe(true);
   });
 
+  // Senza questo, una data di morte impossibile genera un avviso «successivo
+  // alla morte» per ogni evento e ogni periodo di quella persona: decine di
+  // segnalazioni derivate che seppelliscono l'unica che conta.
+  it("non moltiplica gli avvisi quando la causa è già un errore", () => {
+    const rotto = codes(d => { d.people![0]!.death = "1900"; });
+    expect(rotto).toContain("E010");
+    expect(rotto.filter(c => c === "W002")).toEqual([]);
+  });
+
+  it("ma continua a segnalarli quando la vita è coerente", () => {
+    expect(emits(d => { d.people![0]!.events![0]!.date = "1950"; }, "W002")).toBe(true);
+  });
+
   it("intercetta fine prima dell'inizio", () => {
     expect(emits(d => { d.people![0]!.periods![0]!.end = "1900"; }, "E009")).toBe(true);
   });

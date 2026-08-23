@@ -74,6 +74,7 @@ describe("token", () => {
     // Misurate a runtime da `measureChrome`, non dichiarate nei token.
     defined.add("--headh");
     defined.add("--navh");
+    defined.add("--mark-y");   // impostata sulla corsia dei marcatori al disegno
     const used = new Set([...allCss.matchAll(/var\((--[\w-]+)/g)].map(m => m[1]!));
     for (const v of used) expect(defined.has(v), v + " non è definita").toBe(true);
   });

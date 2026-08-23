@@ -13,12 +13,22 @@ import { trackLabel } from "../core/tracks.js";
 import { el } from "./dom.js";
 import { attachTip, type TipContent } from "./tooltip.js";
 import { t } from "../i18n/index.js";
-import { labelBox, placeLabels } from "./labels.js";
+import { assignLanes, labelBox, placeLabels } from "./labels.js";
 import { model, state, visible } from "./state.js";
 import type { EventItem, Mark, Model, Period, Person, Recurrence } from "../core/types.js";
 
 /** Larghezza minima sotto la quale una barra diventa un segno pieno. */
 const TINY_BAR = 4;
+/**
+ * Sotto questa larghezza dentro la barra non entra nemmeno una lettera, e
+ * l'etichetta va cercata fuori. La soglia è bassa di proposito: fra una parola
+ * troncata e una scritta che sborda di tre anni, il troncamento mente meno.
+ */
+const MIN_INSIDE = 18;
+/** Banda in cui vivono l'arco di vita e i rombi degli eventi. */
+const MARK_BAND = 22;
+/** Altezza di una riga di etichette sotto la banda dei marcatori. */
+const LANE_H = 14;
 
 type Scale = (t: number) => number;
 
@@ -105,8 +115,10 @@ function personBlock(M: Model, person: Person, offset: number, X: Scale,
 
   const track = el("div", "track");
   track.style.width = width + "px";
+  track.style.setProperty("--mark-y", (MARK_BAND / 2) + "px");
   track.appendChild(lifeBar(M, person, offset, X));
-  layoutMarks(M, person.marks.filter(m => visible(m.tk)), offset, X, track);
+  const lanes = layoutMarks(M, person.marks.filter(m => visible(m.tk)), offset, X, track);
+  track.style.height = (MARK_BAND + lanes * LANE_H) + "px";
 
   head.appendChild(label);
   head.appendChild(track);
@@ -119,15 +131,20 @@ function personBlock(M: Model, person: Person, offset: number, X: Scale,
     rowLabel.appendChild(el("div", "tname", row.label ?? trackLabel(row.track)));
     const rowTrack = el("div", "track");
     rowTrack.style.width = width + "px";
-    // Le scritte sbordano dalle barre corte: senza un vaglio si accavallano
-    // fra loro. Vince chi ha la barra piu' lunga, cioe' il periodo piu' lungo.
-    const labelled = placeLabels(row.items.map(period => ({
+    // La scritta sta DENTRO il rettangolo, troncata se non ci sta: un'etichetta
+    // che sborda fa sembrare il periodo piu' lungo di quanto sia, ed e' un
+    // errore di lettura peggiore di una parola tagliata.
+    // Restano fuori solo le barre troppo strette per contenere qualsiasi cosa —
+    // una vacanza di due settimane — e quelle si vagliano fra loro.
+    const outside = row.items.filter(q => barWidth(M, q, offset, X) < MIN_INSIDE);
+    const labelled = placeLabels(outside.map(period => ({
       item: period,
       box: labelBox(X(period.start.mid + offset), 0, barText(period), 6),
       priority: (period.end ? period.end.mid : M.now) - period.start.mid
     })));
     for (const period of row.items) {
-      rowTrack.appendChild(bar(M, period, offset, X, labelled.has(period)));
+      const wide = barWidth(M, period, offset, X) >= MIN_INSIDE;
+      rowTrack.appendChild(bar(M, period, offset, X, wide || labelled.has(period), wide));
     }
     line.appendChild(rowLabel);
     line.appendChild(rowTrack);
@@ -165,7 +182,9 @@ function contextBlock(M: Model, X: Scale, width: number): HTMLElement {
   label.appendChild(names);
   const track = el("div", "track");
   track.style.width = width + "px";
-  layoutMarks(M, M.context.map(e => ({ kind: "event", e } as Mark)), 0, X, track);
+  track.style.setProperty("--mark-y", (MARK_BAND / 2) + "px");
+  const lanes = layoutMarks(M, M.context.map(e => ({ kind: "event", e } as Mark)), 0, X, track);
+  track.style.height = (MARK_BAND + lanes * LANE_H) + "px";
   head.appendChild(label);
   head.appendChild(track);
   box.appendChild(head);
@@ -191,8 +210,15 @@ function barText(period: Period): string {
   return isDoc && period.end ? t().chart.expires(fmtDate(period.end)) : period.label;
 }
 
+/** Larghezza in pixel di una barra, con lo stesso minimo usato al disegno. */
+function barWidth(M: Model, period: Period, offset: number, X: Scale): number {
+  const t0 = period.start.mid + offset;
+  const t1 = (period.end ? period.end.mid : M.now) + offset;
+  return Math.max(3, X(t1) - X(t0));
+}
+
 function bar(M: Model, period: Period, offset: number, X: Scale,
-             showLabel = true): HTMLElement {
+             showLabel = true, inside = true): HTMLElement {
   const t0 = period.start.mid + offset;
   const t1 = (period.end ? period.end.mid : M.now) + offset;
   const width = Math.max(3, (t1 - t0) * state.ppy);
@@ -208,7 +234,7 @@ function bar(M: Model, period: Period, offset: number, X: Scale,
   node.style.left = X(t0) + "px";
   node.style.width = width + "px";
 
-  const wrap = el("div", "barwrap");
+  const wrap = el("div", "barwrap" + (inside ? " inside" : ""));
   wrap.style.left = X(t0) + "px";
   wrap.style.width = width + "px";
   if (showLabel) wrap.appendChild(el("div", "barlab", barText(period)));
@@ -220,14 +246,17 @@ function bar(M: Model, period: Period, offset: number, X: Scale,
 }
 
 /**
- * Le etichette dei marcatori si contendono una riga sola. Vincono gli eventi
- * reali su quelli generati dalla scuola e sulle ricorrenze: se devo perdere
- * una scritta, che sia "10 anni — Matrimonio" e non "Maturità".
+ * I marcatori restano tutti in vista: quando le scritte non ci stanno una
+ * accanto all'altra, scendono su una riga in più invece di sparire. Un rigo
+ * verticale collega il rombo alla sua etichetta, altrimenti con tre righe non
+ * si capisce più quale appartiene a chi.
+ *
+ * @returns quante righe di etichette servono, per dimensionare la corsia
  */
 function layoutMarks(M: Model, marks: readonly Mark[], offset: number,
-                     X: Scale, track: HTMLElement): void {
+                     X: Scale, track: HTMLElement): number {
   const xs = marks.map(m => X(m.e.date.mid + offset));
-  const visible = placeLabels(marks.map((mark, i) => {
+  const lanes = assignLanes(marks.map((mark, i) => {
     const source = mark.kind === "rec" ? (mark.e as Recurrence).of : (mark.e as EventItem);
     return {
       item: mark,
@@ -236,11 +265,12 @@ function layoutMarks(M: Model, marks: readonly Mark[], offset: number,
     };
   }));
   marks.forEach((mark, i) => {
-    track.appendChild(markNode(M, mark, xs[i]!, visible.has(mark) ? mark.e.label : null));
+    track.appendChild(markNode(M, mark, xs[i]!, lanes.get(mark)));
   });
+  return lanes.size ? Math.max(...lanes.values()) + 1 : 0;
 }
 
-function markNode(M: Model, mark: Mark, x: number, label: string | null): HTMLElement {
+function markNode(M: Model, mark: Mark, x: number, lane: number | undefined): HTMLElement {
   const isRec = mark.kind === "rec";
   const source = isRec ? (mark.e as Recurrence).of : (mark.e as EventItem);
   const holder = el("div");
@@ -252,15 +282,24 @@ function markNode(M: Model, mark: Mark, x: number, label: string | null): HTMLEl
   // una misura da polpastrello.
   const hit = el("div", "hit");
   hit.style.left = x + "px";
+  hit.style.height = MARK_BAND + "px";
   attachTip(hit, () => tipForMoment(M, mark, isRec));
 
   holder.appendChild(node);
   holder.appendChild(hit);
-  if (label) {
-    const text = el("div", "mklab", label);
+  if (lane != null) {
+    const text = el("div", "mklab", mark.e.label);
     text.style.left = x + "px";
+    text.style.top = (MARK_BAND / 2 + 6 + lane * LANE_H) + "px";
     if (source.generated || isRec) text.style.color = "var(--ink-soft)";
     holder.appendChild(text);
+    if (lane > 0) {
+      const leader = el("div", "mkline");
+      leader.style.left = x + "px";
+      leader.style.top = (MARK_BAND / 2 + 4) + "px";
+      leader.style.height = (lane * LANE_H) + "px";
+      holder.appendChild(leader);
+    }
   }
   return holder;
 }

@@ -19,6 +19,8 @@ export const it = {
     title: "Prospettiva",
     documentTitle: (name: string) => name + " — carta del tempo",
     today: "oggi",
+    lifespan: (birth: string, death: string, age: number) =>
+      birth + " – " + death + " · " + age + " anni",
     year: "Anno",
     age: "Età",
     unknown: "—"

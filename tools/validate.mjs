@@ -22,7 +22,15 @@ if (!fs.existsSync(file)) {
   process.exit(2);
 }
 
-const server = await createServer({ root: ROOT, server: { middlewareMode: true }, appType: "custom" });
+// `noDiscovery` evita che esbuild scandagli le dipendenze: qui serve solo
+// caricare un modulo, e la scansione emette rumore sui percorsi con .js.
+const server = await createServer({
+  root: ROOT,
+  appType: "custom",
+  logLevel: "error",
+  server: { middlewareMode: true },
+  optimizeDeps: { noDiscovery: true, include: [] }
+});
 const { validate } = await server.ssrLoadModule("/src/validate/validate.ts");
 await server.close();
 

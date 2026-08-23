@@ -53,6 +53,13 @@ export function validate(data: unknown): Diagnostic[] {
   const names = new Map<string, number>();
   const births = new Map<number, DateVal>();
   const deaths = new Map<number, DateVal>();
+  /**
+   * Persone la cui vita è già sbagliata alla radice. Senza questo, una data di
+   * morte impossibile genera un avviso «successivo alla morte» per ogni evento
+   * e ogni periodo: ventitré segnalazioni derivate che seppelliscono l'unica
+   * che conta. Chi corregge la causa vede sparire tutto il resto da solo.
+   */
+  const brokenLifespan = new Set<number>();
 
   /* ---------------------------------------------------------------- *
    * Date                                                              *
@@ -168,6 +175,7 @@ export function validate(data: unknown): Diagnostic[] {
   function withinLife(dt: DateVal | null, personIx: number | null,
                       path: string, label: string): void {
     if (personIx == null || !dt) return;
+    if (brokenLifespan.has(personIx)) return;
     const b = births.get(personIx);
     const d = deaths.get(personIx);
     if (b && dt.t1 < b.t0) {
@@ -285,6 +293,7 @@ export function validate(data: unknown): Diagnostic[] {
     if (d) deaths.set(i, d);
     if (b && d && d.t1 <= b.t0) {
       err("E010", P + ".death", R.E010(who, fmtDate(b), fmtDate(d)));
+      brokenLifespan.add(i);
     }
 
     if (p.color != null && !/^#[0-9a-fA-F]{6}$/.test(String(p.color))) {

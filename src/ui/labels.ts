@@ -75,3 +75,42 @@ export function labelBox(x: number, y: number, text: string,
     y1: y + height / 2
   };
 }
+
+/**
+ * Distribuisce le etichette su più righe invece di nasconderle.
+ *
+ * Quando lo spazio orizzontale non basta ci sono due strade: rinunciare a una
+ * scritta, oppure spostarla più in basso. Per i marcatori la seconda è
+ * migliore — sono pochi e ognuno è un fatto che vale la pena leggere — mentre
+ * per i pin di una carta la prima resta l'unica praticabile, perché non c'è un
+ * «sotto» libero.
+ *
+ * Prima riga a chi ha priorità più alta: le cose importanti restano vicine
+ * all'asse, quelle minori scendono.
+ *
+ * @param maxLanes oltre questo numero di righe si smette e si nasconde: un
+ *   muro di testo non è più leggibile di una scritta mancante
+ * @returns riga assegnata a ciascun elemento; chi non c'è va nascosto
+ */
+export function assignLanes<T>(candidates: readonly LabelCandidate<T>[],
+                               maxLanes = 4, gap = 4): Map<T, number> {
+  const lanes: Box[][] = [];
+  const placed = new Map<T, number>();
+  const order = candidates.slice().sort((a, b) =>
+    b.priority - a.priority || a.box.x0 - b.box.x0);
+
+  for (const candidate of order) {
+    const padded: Box = {
+      x0: candidate.box.x0 - gap / 2, x1: candidate.box.x1 + gap / 2,
+      y0: 0, y1: 1
+    };
+    for (let lane = 0; lane < maxLanes; lane++) {
+      const occupied = lanes[lane] ?? (lanes[lane] = []);
+      if (occupied.some(b => padded.x0 < b.x1 && padded.x1 > b.x0)) continue;
+      occupied.push(padded);
+      placed.set(candidate.item, lane);
+      break;
+    }
+  }
+  return placed;
+}

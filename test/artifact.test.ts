@@ -366,21 +366,67 @@ describe("etichette", () => {
   const disgiunti = (bs: { x0: number; x1: number }[]) =>
     bs.every((b, i) => i === 0 || b.x0 >= bs[i - 1]!.x1 - 0.5);
 
-  it("i marcatori di una riga non si accavallano", () => {
+  // Le etichette dei marcatori non si nascondono più: scendono di riga. Il
+  // vincolo vale quindi per riga, non per corsia.
+  it("i marcatori non si accavallano dentro la stessa riga", () => {
     view("chart");
     for (const track of $$("#pane-chart .prow.head .track")) {
-      const labels = [...track.querySelectorAll(".mklab")];
-      expect(disgiunti(boxes(labels, 9)), labels.map(l => l.textContent).join(" | "))
-        .toBe(true);
+      const perRiga = new Map<string, Element[]>();
+      for (const label of track.querySelectorAll(".mklab")) {
+        const top = (label as HTMLElement).style.top;
+        (perRiga.get(top) ?? perRiga.set(top, []).get(top)!).push(label);
+      }
+      for (const [top, labels] of perRiga) {
+        expect(disgiunti(boxes(labels, 9)),
+          "riga " + top + ": " + labels.map(l => l.textContent).join(" | ")).toBe(true);
+      }
     }
   });
 
-  it("le barre di una corsia non si accavallano", () => {
+  it("usa più righe invece di nascondere le scritte", () => {
+    view("chart");
+    const righe = new Set([...$$("#pane-chart .prow.head .mklab")]
+      .map(l => (l as HTMLElement).style.top));
+    expect(righe.size).toBeGreaterThan(1);
+    // La corsia cresce per farcele stare, invece di tagliarle.
+    const track = $("#pane-chart .prow.head .track") as HTMLElement;
+    expect(parseFloat(track.style.height)).toBeGreaterThan(22);
+  });
+
+  it("collega con un rigo le etichette scese di riga", () => {
+    view("chart");
+    const scese = $$("#pane-chart .prow.head .mklab")
+      .filter(l => parseFloat((l as HTMLElement).style.top) > 20).length;
+    expect($$("#pane-chart .prow.head .mkline").length).toBe(scese);
+  });
+
+  // Regressione: una scritta che sborda fa sembrare il periodo più lungo di
+  // quanto sia. "Scuola Normale Superiore" arrivava al 1925 su una barra che
+  // finiva nel 1922.
+  it("le etichette dei periodi restano dentro il rettangolo", () => {
+    view("chart");
+    const wraps = $$("#pane-chart .barwrap.inside").filter(w => w.querySelector(".barlab"));
+    expect(wraps.length).toBeGreaterThan(5);
+    for (const w of wraps) {
+      const el = w as HTMLElement;
+      expect(parseFloat(el.style.width)).toBeGreaterThanOrEqual(18);
+      // Il confinamento è dichiarato nel CSS, non nella misura del testo.
+      expect(el.className).toContain("inside");
+    }
+    const css = fs.readFileSync(ARTIFACT, "utf8");
+    expect(css).toMatch(/\.barwrap\.inside\{[^}]*overflow:hidden/);
+    expect(css).toMatch(/\.barwrap\.inside \.barlab\{[^}]*text-overflow:ellipsis/);
+  });
+
+  it("solo le barre troppo strette portano l'etichetta fuori, e senza accavallarsi", () => {
     view("chart");
     for (const track of $$("#pane-chart .prow:not(.head) .track")) {
-      const wraps = [...track.querySelectorAll(".barwrap")]
+      const fuori = [...track.querySelectorAll(".barwrap:not(.inside)")]
         .filter(w => w.querySelector(".barlab"));
-      const measured = wraps.map(w => {
+      for (const w of fuori) {
+        expect(parseFloat((w as HTMLElement).style.width)).toBeLessThan(18);
+      }
+      const measured = fuori.map(w => {
         const x = parseFloat((w as HTMLElement).style.left) + 6;
         const text = w.querySelector(".barlab")?.textContent ?? "";
         return { x0: x, x1: x + text.length * 11 * 0.55 };

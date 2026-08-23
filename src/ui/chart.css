@@ -43,10 +43,10 @@
 .pmeta{font-family:var(--data); font-size:10px; color:var(--ink-soft); letter-spacing:.04em}
 .tname{font-family:var(--data); font-size:9.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-soft)}
 .track{position:relative; flex:1 0 auto; height:var(--rowh)}
-.prow.head .track{height:24px}
+
 
 .lifebar{
-  position:absolute; top:50%; transform:translateY(-50%); height:5px; border-radius:3px;
+  position:absolute; top:var(--mark-y,50%); transform:translateY(-50%); height:5px; border-radius:3px;
   background:var(--lane);
 }
 .bar{
@@ -60,17 +60,25 @@
   position:absolute; left:6px; white-space:nowrap; font-size:11px; line-height:1;
   color:var(--ink); opacity:1; pointer-events:none;
 }
+.barwrap.inside .barlab{
+  position:static; width:100%; overflow:hidden; text-overflow:ellipsis;
+}
 .barwrap{position:absolute; top:0; height:var(--rowh); display:flex; align-items:center; cursor:default}
+/* Etichetta confinata nel rettangolo: se non ci sta viene troncata, non
+   lasciata sbordare — una scritta che esce fa sembrare il periodo piu' lungo. */
+.barwrap.inside{overflow:hidden; padding:0 5px}
 .mk{
-  position:absolute; top:50%; width:9px; height:9px; margin:-4.5px 0 0 -4.5px;
+  position:absolute; top:var(--mark-y,50%); width:9px; height:9px; margin:-4.5px 0 0 -4.5px;
   background:currentColor; transform:rotate(45deg); cursor:default;
 }
 .mk.soft{background:var(--paper); border:1.5px solid currentColor}
 .mk.rec{width:7px;height:7px;margin:-3.5px 0 0 -3.5px; border-radius:50%; transform:none; background:var(--paper); border:1.5px solid currentColor}
 .mklab{
-  position:absolute; top:50%; transform:translateY(-50%); white-space:nowrap;
+  position:absolute; transform:translateY(-50%); white-space:nowrap;
   font-size:11px; pointer-events:none; margin-left:9px; color:var(--ink);
 }
+/* Rigo che lega il rombo alla sua etichetta quando questa e' scesa di riga. */
+.mkline{position:absolute; width:1px; background:currentColor; opacity:.3; pointer-events:none}
 .hit{position:absolute; top:0; height:var(--rowh); width:16px;
   transform:translateX(-50%); cursor:default}
 @media (pointer:coarse){

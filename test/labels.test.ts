@@ -4,7 +4,7 @@
  * — nascondevano scritte senza motivo e ne lasciavano accavallare altre.
  */
 import { describe, expect, it } from "vitest";
-import { estimateWidth, labelBox, placeLabels, type Box } from "../src/ui/labels.js";
+import { assignLanes, estimateWidth, labelBox, placeLabels, type Box } from "../src/ui/labels.js";
 
 const box = (x0: number, x1: number, y0 = 0, y1 = 10): Box => ({ x0, x1, y0, y1 });
 
@@ -109,5 +109,73 @@ describe("labelBox", () => {
   it("centra il rettangolo sulla riga", () => {
     const b = labelBox(0, 50, "x", 0);
     expect((b.y0 + b.y1) / 2).toBeCloseTo(50, 6);
+  });
+});
+
+describe("assignLanes", () => {
+  it("tiene tutto su una riga quando c'è spazio", () => {
+    const lanes = assignLanes([
+      { item: "a", box: box(0, 40), priority: 1 },
+      { item: "b", box: box(60, 100), priority: 1 }
+    ]);
+    expect(lanes.get("a")).toBe(0);
+    expect(lanes.get("b")).toBe(0);
+  });
+
+  // La differenza con `placeLabels`: qui nessuno viene perso.
+  it("scende di riga invece di nascondere", () => {
+    const lanes = assignLanes([
+      { item: "a", box: box(0, 60), priority: 2 },
+      { item: "b", box: box(50, 110), priority: 1 }
+    ]);
+    expect(lanes.size).toBe(2);
+    expect(lanes.get("a")).toBe(0);
+    expect(lanes.get("b")).toBe(1);
+  });
+
+  it("dà la prima riga a chi ha priorità più alta", () => {
+    const lanes = assignLanes([
+      { item: "minore", box: box(0, 60), priority: 1 },
+      { item: "maggiore", box: box(10, 70), priority: 9 }
+    ]);
+    expect(lanes.get("maggiore")).toBe(0);
+    expect(lanes.get("minore")).toBe(1);
+  });
+
+  it("riusa una riga superiore appena lo spazio si libera", () => {
+    const lanes = assignLanes([
+      { item: "a", box: box(0, 60), priority: 3 },
+      { item: "b", box: box(50, 110), priority: 2 },
+      { item: "c", box: box(120, 180), priority: 1 }
+    ]);
+    expect(lanes.get("a")).toBe(0);
+    expect(lanes.get("b")).toBe(1);
+    expect(lanes.get("c")).toBe(0);
+  });
+
+  it("smette di scendere oltre il limite e nasconde il resto", () => {
+    // Cinque etichette tutte sovrapposte, con due righe consentite.
+    const items = ["a", "b", "c", "d", "e"].map((item, i) => ({
+      item, box: box(0, 100), priority: 5 - i
+    }));
+    const lanes = assignLanes(items, 2);
+    expect(lanes.size).toBe(2);
+    expect(lanes.get("a")).toBe(0);
+    expect(lanes.get("b")).toBe(1);
+    expect(lanes.has("e")).toBe(false);
+  });
+
+  it("è stabile fra chiamate identiche", () => {
+    const items = [
+      { item: "a", box: box(0, 60), priority: 1 },
+      { item: "b", box: box(50, 110), priority: 1 },
+      { item: "c", box: box(100, 160), priority: 1 }
+    ];
+    const primo = [...assignLanes(items).entries()];
+    for (let i = 0; i < 5; i++) expect([...assignLanes(items).entries()]).toEqual(primo);
+  });
+
+  it("regge l'elenco vuoto", () => {
+    expect(assignLanes([]).size).toBe(0);
   });
 });

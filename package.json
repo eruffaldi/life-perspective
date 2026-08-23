@@ -1,6 +1,6 @@
 {
   "name": "prospettiva",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Carta del tempo: vite, scuole, scadenze e luoghi di una famiglia in un solo file HTML offline",
   "type": "module",
   "private": true,
