@@ -1,0 +1,258 @@
+{
+  "version": 1,
+  "meta": {
+    "title": "Enrico Fermi e i ragazzi di via Panisperna",
+    "anchor": "enrico"
+  },
+  "settings": {
+    "ageDisplay": "midpoint",
+    "milestones": [10, 25, 50],
+    "horizon": "2005"
+  },
+
+  "people": [
+    {
+      "id": "enrico",
+      "name": "Enrico Fermi",
+      "role": "self",
+      "birth": "1901-09-29",
+      "death": "1954-11-28",
+      "color": "#16606B",
+      "periods": [
+        { "label": "Liceo Umberto I", "start": "1915-09", "end": "1918-07",
+          "track": "school", "place": "Roma" },
+        { "label": "Scuola Normale Superiore", "start": "1918-11", "end": "1922-07",
+          "track": "school", "place": "Pisa" },
+        { "label": "Göttingen, il gruppo di Born", "start": "1923-01", "end": "1923-08",
+          "track": "school", "place": "Göttingen", "circa": true },
+        { "label": "Leiden, con Ehrenfest", "start": "1924-09", "end": "1924-12",
+          "track": "school", "place": "Leiden" },
+        { "label": "Incarico a Firenze", "start": "1924-12", "end": "1926-11",
+          "track": "work", "place": "Firenze" },
+        { "label": "Cattedra di fisica teorica", "start": "1927-01", "end": "1938-12",
+          "track": "work", "place": "Roma" },
+        { "label": "Columbia University", "start": "1939-01", "end": "1942-04",
+          "track": "work", "place": "New York" },
+        { "label": "Metallurgical Laboratory", "start": "1942-04", "end": "1944-08",
+          "track": "work", "place": "Chicago" },
+        { "label": "Los Alamos", "start": "1944-09", "end": "1945-12",
+          "track": "work", "place": "Los Alamos" },
+        { "label": "Institute for Nuclear Studies", "start": "1946-01", "end": "1954-11",
+          "track": "work", "place": "Chicago" },
+        { "label": "Casa dei genitori", "start": "1901-09", "end": "1918-11",
+          "track": "home", "place": "Roma" },
+        { "label": "Roma", "start": "1926-11", "end": "1938-12",
+          "track": "home", "place": "Roma" },
+        { "label": "New York", "start": "1939-01", "end": "1942-04",
+          "track": "home", "place": "New York" },
+        { "label": "Chicago", "start": "1942-04", "end": "1954-11",
+          "track": "home", "place": "Chicago" }
+      ],
+      "events": [
+        { "label": "Laurea alla Normale", "date": "1922-07-04",
+          "category": "school", "place": "Pisa" },
+        { "label": "Statistica di Fermi–Dirac", "date": "1926-02",
+          "category": "life", "place": "Firenze" },
+        { "label": "Teoria del decadimento beta", "date": "1933-12",
+          "category": "life", "place": "Roma" },
+        { "label": "Neutroni lenti", "date": "1934-10-22",
+          "category": "life", "place": "Roma" },
+        { "label": "Premio Nobel per la fisica", "date": "1938-12-10",
+          "category": "life", "place": "Stoccolma" },
+        { "label": "Sbarco a New York", "date": "1939-01-02",
+          "category": "life", "place": "New York" },
+        { "label": "Prima reazione a catena", "date": "1942-12-02",
+          "category": "life", "place": "Chicago" },
+        { "label": "Cittadinanza statunitense", "date": "1944-07-11",
+          "category": "life", "place": "Chicago" },
+        { "label": "Trinity", "date": "1945-07-16",
+          "category": "life", "place": "Alamogordo" }
+      ]
+    },
+
+    {
+      "id": "laura",
+      "name": "Laura Capon",
+      "role": "partner",
+      "birth": "1907-06-16",
+      "death": "1977-12-26",
+      "color": "#98402F",
+      "periods": [
+        { "label": "Roma", "start": "1907-06", "end": "1938-12", "track": "home", "place": "Roma" },
+        { "label": "New York", "start": "1939-01", "end": "1942-04", "track": "home", "place": "New York" },
+        { "label": "Chicago", "start": "1942-04", "end": "1977-12", "track": "home", "place": "Chicago" }
+      ],
+      "events": [
+        { "label": "Pubblica «Atomi in famiglia»", "date": "1954",
+          "category": "life", "place": "Chicago" }
+      ]
+    },
+
+    {
+      "id": "nella",
+      "name": "Nella Fermi",
+      "role": "child",
+      "birth": "1931-01-31",
+      "death": "1995",
+      "color": "#35407E",
+      "periods": [
+        { "label": "Roma", "start": "1931-01", "end": "1938-12", "track": "home", "place": "Roma" },
+        { "label": "Stati Uniti", "start": "1939-01", "track": "home", "place": "Chicago" }
+      ],
+      "events": []
+    },
+
+    {
+      "id": "giulio",
+      "name": "Giulio Fermi",
+      "role": "child",
+      "birth": "1936-02-16",
+      "death": "1997",
+      "color": "#9A7412",
+      "periods": [
+        { "label": "Roma", "start": "1936-02", "end": "1938-12", "track": "home", "place": "Roma" },
+        { "label": "Stati Uniti", "start": "1939-01", "track": "home", "place": "Chicago" }
+      ],
+      "events": []
+    },
+
+    {
+      "id": "rasetti",
+      "name": "Franco Rasetti",
+      "role": "friend",
+      "birth": "1901-08-10",
+      "death": "2001-12-05",
+      "color": "#4E656D",
+      "periods": [
+        { "label": "Scuola Normale Superiore", "start": "1919-11", "end": "1922-07",
+          "track": "school", "place": "Pisa" },
+        { "label": "Via Panisperna", "start": "1927-01", "end": "1938-10",
+          "track": "work", "place": "Roma" },
+        { "label": "Johns Hopkins", "start": "1947-09", "end": "1967-06",
+          "track": "work", "place": "Baltimora" }
+      ],
+      "events": [
+        { "label": "Rifiuta di lavorare alla bomba", "date": "1943",
+          "category": "life", "circa": true }
+      ]
+    },
+
+    {
+      "id": "segre",
+      "name": "Emilio Segrè",
+      "role": "friend",
+      "birth": "1905-02-01",
+      "death": "1989-04-22",
+      "color": "#6B3A6E",
+      "periods": [
+        { "label": "Via Panisperna", "start": "1928-01", "end": "1935-12",
+          "track": "work", "place": "Roma" },
+        { "label": "Cattedra a Palermo", "start": "1936-01", "end": "1938-08",
+          "track": "work", "place": "Palermo" },
+        { "label": "Berkeley", "start": "1938-08", "end": "1972-06",
+          "track": "work", "place": "Berkeley" },
+        { "label": "Los Alamos", "start": "1943-06", "end": "1946-01",
+          "track": "work", "place": "Los Alamos" }
+      ],
+      "events": [
+        { "label": "Premio Nobel per la fisica", "date": "1959-12-10",
+          "category": "life", "place": "Stoccolma" }
+      ]
+    },
+
+    {
+      "id": "majorana",
+      "name": "Ettore Majorana",
+      "role": "friend",
+      "birth": "1906-08-05",
+      "death": "1938-03",
+      "color": "#8A6D3B",
+      "periods": [
+        { "label": "Via Panisperna", "start": "1928-01", "end": "1933-01",
+          "track": "work", "place": "Roma" },
+        { "label": "Lipsia, con Heisenberg", "start": "1933-01", "end": "1933-08",
+          "track": "school", "place": "Lipsia" },
+        { "label": "Cattedra a Napoli", "start": "1937-11", "end": "1938-03",
+          "track": "work", "place": "Napoli" }
+      ],
+      "events": [
+        { "label": "Scompare in mare", "date": "1938-03-27",
+          "category": "life", "place": "Napoli" }
+      ]
+    },
+
+    {
+      "id": "amaldi",
+      "name": "Edoardo Amaldi",
+      "role": "friend",
+      "birth": "1908-09-05",
+      "death": "1989-12-05",
+      "color": "#2F6B4F",
+      "periods": [
+        { "label": "Via Panisperna", "start": "1929-01", "end": "1938-12",
+          "track": "work", "place": "Roma" },
+        { "label": "Cattedra a Roma", "start": "1938-12", "end": "1979-10",
+          "track": "work", "place": "Roma" }
+      ],
+      "events": [
+        { "label": "Nasce il CERN", "date": "1954-09-29",
+          "category": "life", "place": "Ginevra" }
+      ]
+    },
+
+    {
+      "id": "pontecorvo",
+      "name": "Bruno Pontecorvo",
+      "role": "friend",
+      "birth": "1913-08-22",
+      "death": "1993-09-24",
+      "color": "#7A4A2B",
+      "periods": [
+        { "label": "Via Panisperna", "start": "1934-01", "end": "1936-06",
+          "track": "work", "place": "Roma" },
+        { "label": "Laboratorio Curie", "start": "1936-09", "end": "1940-06",
+          "track": "work", "place": "Parigi" },
+        { "label": "Dubna", "start": "1950-09", "end": "1993-09",
+          "track": "work", "place": "Dubna" }
+      ],
+      "events": [
+        { "label": "Sparisce dall'Occidente", "date": "1950-09",
+          "category": "life", "circa": true }
+      ]
+    }
+  ],
+
+  "events": [
+    { "id": "nozze", "label": "Matrimonio", "date": "1928-07-19",
+      "category": "family", "who": ["enrico", "laura"], "place": "Roma",
+      "recurrences": [10, 25] },
+    { "label": "Imbarco sul Franconia", "date": "1938-12-24",
+      "category": "family", "who": ["enrico", "laura"], "place": "Southampton" },
+
+    { "label": "Marcia su Roma", "date": "1922-10-28", "category": "history" },
+    { "label": "Leggi razziali", "date": "1938-11-17", "category": "history" },
+    { "label": "Scoperta della fissione", "date": "1938-12-22", "category": "history" },
+    { "label": "Hiroshima", "date": "1945-08-06", "category": "history" }
+  ],
+
+  "periods": [
+    { "label": "Prima guerra mondiale", "start": "1914-07-28", "end": "1918-11-11",
+      "track": "world", "category": "history" },
+    { "label": "Regime fascista", "start": "1922-10-31", "end": "1943-07-25",
+      "track": "world", "category": "history" },
+    { "label": "Seconda guerra mondiale", "start": "1939-09-01", "end": "1945-09-02",
+      "track": "world", "category": "history" }
+  ],
+
+  "places": {
+    "Göttingen": [51.5413, 9.9158],
+    "Leiden": [52.1601, 4.4970],
+    "Lipsia": [51.3397, 12.3731],
+    "Southampton": [50.9097, -1.4044],
+    "Baltimora": [39.2904, -76.6122],
+    "Berkeley": [37.8715, -122.2730],
+    "Los Alamos": [35.8800, -106.3031],
+    "Alamogordo": [33.6773, -106.4754],
+    "Dubna": [56.7333, 37.1667]
+  }
+}

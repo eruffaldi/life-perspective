@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prospettiva — una carta del tempo per la famiglia</title>
+<meta name="description" content="Vite, scuole, scadenze e luoghi di una famiglia sullo stesso asse del tempo. Un solo file HTML, funziona senza rete, i dati non escono dal dispositivo.">
+<link rel="stylesheet" href="site.css">
+<link rel="icon" href="immagini/icona.png">
+
+<!-- Anteprima quando il collegamento viene condiviso. -->
+<meta property="og:title" content="Prospettiva — una carta del tempo per la famiglia">
+<meta property="og:description" content="Quanti anni avrò alla maturità di mia figlia? Cosa faceva mio nonno alla mia età? Quale anno sarà quello in cui tutto capita insieme?">
+<meta property="og:type" content="website">
+<meta property="og:image" content="immagini/anteprima.png">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="./">Prospettiva<span>.</span></a>
+    <nav>
+      <a href="#viste">Le viste</a>
+      <a href="#dati">I dati</a>
+      <a href="#limiti">Limiti</a>
+      <a href="en/">English</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>Una carta del tempo per la propria famiglia</h1>
+    <p>Vite, scuole, lavori, case, vacanze, scadenze e luoghi, tutti sullo stesso
+       asse. Serve a rispondere a domande che un calendario non sa affrontare.</p>
+    <p class="sub"><em>Quanti anni avrò alla maturità di mia figlia? Cosa faceva mio
+       nonno alla mia età? Quale sarà l'anno in cui tutto capita insieme?</em></p>
+
+    <div class="actions">
+      <!-- Se pubblichi l'applicazione altrove, cambia solo questi due indirizzi. -->
+      <a class="btn primary" href="prospettiva.html">Apri l'applicazione</a>
+      <a class="btn" href="prospettiva.html" download>Scarica il file</a>
+    </div>
+  </div>
+</div>
+
+<section id="cosa">
+  <div class="wrap">
+    <h2>Un file solo, e basta</h2>
+    <p class="lede">L'applicazione è un unico file HTML. Nessun account, nessun
+       server, nessuna tile da scaricare: doppio clic e funziona, anche in aereo o
+       in barca senza campo. I dati restano sul dispositivo — l'unico modo per
+       farli uscire è il pulsante che li scarica.</p>
+
+    <figure>
+      <img src="images/history.png" alt="La vista cronologia con quattro generazioni">
+      <figcaption>La cronologia: una corsia per persona, con sotto le tracce di
+        scuola, lavoro, casa e scadenze. La linea verticale segna oggi.</figcaption>
+    </figure>
+
+    <div class="points">
+      <div>
+        <h3>Il gesto centrale</h3>
+        <p>Passi sopra un qualsiasi elemento e leggi l'età di <em>tutti</em> in
+           quel momento. È la ragione per cui esiste.</p>
+      </div>
+      <div>
+        <h3>Molte cose si calcolano</h3>
+        <p>Da una data di nascita escono i cicli scolastici e la maturità; da una
+           scadenza, la catena dei rinnovi. Non si inseriscono a mano.</p>
+      </div>
+      <div>
+        <h3>Date imprecise ammesse</h3>
+        <p>Di un bisnonno spesso si sa solo l'anno. Si scrive <code>1921</code>, e
+           le età che ne derivano vengono mostrate come approssimate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="viste">
+  <div class="wrap">
+    <h2>Cinque modi di guardare le stesse vite</h2>
+    <p class="lede">Lo stesso insieme di dati, cinque letture. Ognuna risponde a
+       una domanda diversa.</p>
+
+    <div class="gallery">
+      <figure>
+        <img src="images/aligned.png" alt="Vite traslate a partire dalla nascita">
+        <figcaption><strong>Età allineate.</strong> Tutte le vite traslate a
+          nascita&nbsp;=&nbsp;zero. L'unica vista che permette di sovrapporre le
+          generazioni.</figcaption>
+      </figure>
+
+      <figure>
+        <img src="images/places.png" alt="La carta dei luoghi con le tracce dei traslochi">
+        <figcaption><strong>Luoghi.</strong> Coste incorporate, nessuna rete. Il
+          cerchio cresce con gli anni passati sul posto; un cursore spegne i luoghi
+          che in quell'anno non c'entravano.</figcaption>
+      </figure>
+
+      <figure>
+        <img src="images/dense.png" alt="Gli anni in cui si accavallano più cose">
+        <figcaption><strong>Anni densi.</strong> Gli anni in cui si accavallano due
+          o più cose, con il conto alla rovescia dei prossimi passaggi.</figcaption>
+      </figure>
+
+      <figure>
+        <img src="images/matrix.png" alt="Tabella di momenti per persona">
+        <figcaption><strong>Matrice.</strong> Ogni riga un momento, ogni colonna
+          una persona: la cella dice l'età.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="dati">
+  <div class="wrap">
+    <h2>I dati li scrivi tu</h2>
+    <p class="lede">Un file JSON che si incolla nell'applicazione. Nessun modulo da
+       compilare, nessun campo obbligatorio oltre al nome e alla data di nascita.</p>
+
+    <pre><code>{
+  "people": [
+    { "id": "anna", "name": "Anna", "birth": "2012-09-03",
+      "school": { "through": "bachelor" },
+      "documents": [
+        { "label": "Carta d'identità", "type": "identita", "expires": "2027-09-03" }
+      ]
+    }
+  ],
+  "events": [
+    { "label": "Matrimonio", "date": "2007-06-16",
+      "who": ["marta", "davide"], "recurrences": [10, 25] }
+  ]
+}</code></pre>
+
+    <p>Da queste poche righe l'applicazione ricava la maturità di Anna nel 2031, i
+       rinnovi della carta d'identità fino all'orizzonte, gli anniversari, i
+       compleanni tondi di tutti, e l'età di ciascuno in ognuno di quei momenti.</p>
+
+    <div class="note">
+      Quando qualcosa non torna, il controllo raccoglie <em>tutte</em> le
+      segnalazioni in una volta invece di fermarsi alla prima, dice dove si trova
+      il punto e cosa fare. Un errore blocca il caricamento, un avviso no.
+    </div>
+  </div>
+</section>
+
+<section id="limiti">
+  <div class="wrap">
+    <h2>Cosa non fa</h2>
+    <p class="lede">Vale la pena saperlo prima di provarlo, non dopo.</p>
+
+    <h3>Non è un archivio</h3>
+    <p>Il salvataggio nel browser è comodità: si perde svuotando i dati del
+       browser o cambiando dispositivo. Il file che scarichi è la copia buona.</p>
+
+    <h3>Le regole sono italiane</h3>
+    <p>I cicli scolastici generati sono quelli della scuola italiana di oggi, e le
+       validità dei documenti quelle dello Stato italiano. L'interfaccia si può
+       leggere in inglese; le regole restano quelle. Per un percorso diverso — un
+       vecchio ordinamento, una scuola straniera — i periodi si inseriscono a
+       mano, che è poi quello che si fa per i nonni.</p>
+
+    <h3>Non è un albero genealogico</h3>
+    <p>Non ci sono legami di parentela né discendenze: ci sono persone su un asse
+       del tempo. Se cerchi un genealogico, questo non lo è.</p>
+
+    <h3>Non condivide niente</h3>
+    <p>Non c'è modo di mandare la propria carta a qualcun altro dall'interno
+       dell'applicazione. Si scambia il file JSON.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Prospettiva</span>
+    <a href="https://github.com/eruffaldi/life-perspective/">Codice sorgente</a>
+    <a href="prospettiva.html">Applicazione</a>
+    <span>Coste: Natural Earth, pubblico dominio.</span>
+  </div>
+</footer>
+
+</body>
+</html>

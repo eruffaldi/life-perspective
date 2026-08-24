@@ -1,0 +1,121 @@
+/* Sito di presentazione. Vive per conto suo: nessun passo di build, nessuna
+   dipendenza dal codice dell'applicazione, si pubblica copiando la cartella.
+
+   I valori qui sotto ricalcano il linguaggio visivo dell'applicazione ma ne
+   sono una copia deliberata. È il prezzo dell'indipendenza: se un giorno
+   cambia la tavolozza dell'app, questo file non se ne accorge e va aggiornato
+   a mano. In cambio il sito non si rompe mai per una modifica al codice. */
+
+:root{
+  --paper:#E7EDEE;
+  --paper-2:#DDE6E7;
+  --ink:#0D2B3A;
+  --ink-soft:#4E656D;
+  --rule:#B7C7CA;
+  --rule-soft:#CBD8DA;
+  --now:#B3216B;
+
+  --display:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+  --ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --data:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--ui); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%; height:auto; display:block}
+a{color:var(--ink); text-decoration-color:var(--rule); text-underline-offset:3px}
+a:hover{text-decoration-color:var(--now)}
+
+.wrap{max-width:960px; margin:0 auto; padding:0 24px}
+
+/* ---------- intestazione ---------- */
+.top{
+  position:sticky; top:0; z-index:10; background:var(--paper);
+  border-bottom:1px solid var(--rule);
+}
+.top .wrap{display:flex; align-items:center; gap:18px; padding-top:14px; padding-bottom:14px}
+.mark{font-family:var(--display); font-size:20px; text-decoration:none}
+.mark span{color:var(--now)}
+.top nav{margin-left:auto; display:flex; gap:18px; font-size:14px}
+.top nav a{text-decoration:none; color:var(--ink-soft)}
+.top nav a:hover{color:var(--ink)}
+
+/* ---------- apertura ---------- */
+.hero{padding:72px 0 40px; border-bottom:1px solid var(--rule-soft)}
+.hero h1{
+  font-family:var(--display); font-size:44px; line-height:1.12; font-weight:500;
+  margin:0 0 18px; letter-spacing:-.01em; max-width:18ch;
+}
+.hero p{font-size:19px; max-width:62ch; margin:0 0 14px; color:var(--ink)}
+.hero p.sub{color:var(--ink-soft); font-size:17px}
+.actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:30px}
+.btn{
+  display:inline-block; padding:12px 22px; border:1px solid var(--ink);
+  border-radius:2px; text-decoration:none; font-size:15px;
+}
+.btn.primary{background:var(--ink); color:var(--paper)}
+.btn.primary:hover{background:var(--now); border-color:var(--now)}
+.btn:hover{border-color:var(--now); color:var(--now)}
+.btn.primary:hover{color:var(--paper)}
+
+/* ---------- sezioni ---------- */
+section{padding:56px 0; border-bottom:1px solid var(--rule-soft)}
+section:last-of-type{border-bottom:0}
+h2{font-family:var(--display); font-size:28px; font-weight:500; margin:0 0 10px}
+h3{font-family:var(--display); font-size:19px; font-weight:500; margin:28px 0 6px}
+.lede{color:var(--ink-soft); max-width:64ch; margin:0 0 26px}
+p{max-width:64ch}
+
+/* ---------- immagini ---------- */
+figure{
+  margin:26px 0 0; border:1px solid var(--rule); border-radius:2px;
+  background:var(--paper-2); overflow:hidden;
+}
+figure img{width:100%}
+figcaption{
+  padding:10px 14px; border-top:1px solid var(--rule);
+  font-size:13.5px; color:var(--ink-soft); background:var(--paper);
+}
+/* Riquadro in attesa dell'immagine: si vede subito cosa manca e dove va. */
+.slot{
+  aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;
+  background:repeating-linear-gradient(-45deg,var(--paper-2) 0 10px,var(--paper) 10px 20px);
+  font-family:var(--data); font-size:12px; color:var(--ink-soft); letter-spacing:.06em;
+  text-align:center; padding:20px;
+}
+.gallery{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:20px}
+.gallery figure{margin:0}
+
+/* ---------- elenchi e codice ---------- */
+.points{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:26px 32px; margin-top:26px}
+.points h3{margin:0 0 4px}
+.points p{font-size:15px; color:var(--ink-soft); margin:0}
+pre{
+  background:var(--paper-2); border:1px solid var(--rule); border-radius:2px;
+  padding:16px 18px; overflow-x:auto; font-family:var(--data); font-size:13px;
+  line-height:1.55; margin:20px 0;
+}
+code{font-family:var(--data); font-size:.92em}
+p code,li code{background:var(--paper-2); padding:1px 5px; border-radius:2px}
+.note{
+  border-left:2px solid var(--now); padding:2px 0 2px 16px; margin:24px 0;
+  color:var(--ink-soft); font-size:15px; max-width:62ch;
+}
+
+/* ---------- chiusura ---------- */
+footer{padding:40px 0 64px; font-size:14px; color:var(--ink-soft)}
+footer .wrap{display:flex; gap:24px; flex-wrap:wrap; align-items:baseline}
+footer a{color:var(--ink-soft)}
+
+@media (max-width:640px){
+  .hero{padding:48px 0 32px}
+  .hero h1{font-size:32px}
+  .hero p{font-size:17px}
+  section{padding:40px 0}
+  .top nav{gap:12px; font-size:13px}
+}
